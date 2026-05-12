@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Header, HTTPException, Depends
+from fastapi import FastAPI, Header, HTTPException, Depends, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from typing import List, Optional
 import os
@@ -12,12 +13,22 @@ load_dotenv()
 app = FastAPI(title="Vaccine Analyzer API")
 
 # Security key
-API_KEY = os.getenv("API_KEY", "default_secret_key")
+X_API_KEY = os.getenv("X_API_KEY", "default_secret_key")
 
-def verify_api_key(x_api_key: str = Header(...)):
-    if x_api_key != API_KEY:
+def verify_api_key(x_api_key_header: str = Header(..., alias="X-API-KEY")):
+    if x_api_key_header != X_API_KEY:
         raise HTTPException(status_code=403, detail="Invalid API Key")
-    return x_api_key
+    return x_api_key_header
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    import traceback
+    print(f"Global error: {str(exc)}")
+    print(traceback.format_exc())
+    return JSONResponse(
+        status_code=500,
+        content={"status": "error", "message": "Internal server error", "detail": str(exc)},
+    )
 
 # Request Models
 class LookupRequest(BaseModel):
@@ -35,9 +46,9 @@ def get_portal_client():
 def get_analyzer_service():
     return AnalyzerService()
 
-@app.get("/health")
+@app.get("/api/health")
 async def health_check():
-    return {"status": "ok", "message": "Backend is running"}
+    return {"status": "ok", "message": "Backend is running", "environment": os.getenv("VERCEL_ENV", "local")}
 
 @app.get("/")
 async def root():

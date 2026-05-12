@@ -1,30 +1,33 @@
 import pytest
 from fastapi.testclient import TestClient
-from api.index import app, API_KEY
+from api.index import app, X_API_KEY, get_portal_client
 from unittest.mock import MagicMock, patch
 
 client = TestClient(app)
 
 @pytest.fixture
 def mock_portal_client():
-    with patch("api.index.PortalClient") as mock:
-        yield mock.return_value
+    mock = MagicMock()
+    app.dependency_overrides[get_portal_client] = lambda: mock
+    yield mock
+    app.dependency_overrides.clear()
 
 def test_health_check():
-    response = client.get("/health")
+    response = client.get("/api/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "ok", "message": "Backend is running"}
+    assert response.json()["status"] == "ok"
+    assert "environment" in response.json()
 
 def test_root():
     response = client.get("/")
     assert response.status_code == 200
     assert "Welcome" in response.json()["message"]
 
-def test_lookup_no_key():
+def test_lookup_no_key(mock_portal_client):
     response = client.post("/api/lookup", json={"phone": "0987654321"})
     assert response.status_code == 422 # FastAPI returns 422 for missing required Header
 
-def test_lookup_invalid_key():
+def test_lookup_invalid_key(mock_portal_client):
     response = client.post(
         "/api/lookup", 
         json={"phone": "0987654321"},
@@ -40,7 +43,7 @@ def test_lookup_success(mock_portal_client):
     response = client.post(
         "/api/lookup",
         json={"phone": "0987654321"},
-        headers={"X-API-KEY": API_KEY}
+        headers={"X-API-KEY": X_API_KEY}
     )
     
     assert response.status_code == 200
@@ -63,7 +66,7 @@ def test_analyze_success(mock_portal_client):
     response = client.post(
         "/api/analyze",
         json={"patient_id": "123", "phone": "0987654321"},
-        headers={"X-API-KEY": API_KEY}
+        headers={"X-API-KEY": X_API_KEY}
     )
     
     assert response.status_code == 200
