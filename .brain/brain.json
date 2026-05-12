@@ -20,16 +20,19 @@
   },
   "api_endpoints": [
     { "path": "/api/lookup", "method": "POST", "description": "Tìm kiếm bệnh nhân" },
-    { "path": "/api/analyze", "method": "POST", "description": "Phân tích mũi tiêm" }
+    { "path": "/api/analyze", "method": "POST", "description": "Phân tích mũi tiêm" },
+    { "path": "/api/health", "method": "GET", "description": "Kiểm tra trạng thái hệ thống và Redis" }
   ],
   "knowledge_items": {
     "patterns": [
       "Client-Server architecture with centralized analysis engine",
-      "Sublabel-aware HTML parsing to avoid brand/disease name collision"
+      "Sublabel-aware HTML parsing to avoid brand/disease name collision",
+      "Serverless-friendly session management using Upstash Redis"
     ],
     "gotchas": [
       "VNCDC Portal uses sublabels for disease names which must be stripped for brand-matching",
-      "Retrofit timeouts must be high (60s+) for serverless scraping"
+      "Vercel sub-directory deployments require 'Root Directory' setting and relative paths in vercel.json",
+      "Upstash Redis REST API is preferred for serverless to avoid connection pooling issues"
     ]
   }
 }

@@ -1,4 +1,5 @@
 {
+  "version": 2,
   "rewrites": [
     {
       "source": "/api/(.*)",
@@ -7,10 +8,15 @@
     {
       "source": "/health",
       "destination": "api/index.py"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "api/index.py"
     }
   ],
   "functions": {
     "api/index.py": {
+      "runtime": "@vercel/python",
       "maxDuration": 30
     }
   }

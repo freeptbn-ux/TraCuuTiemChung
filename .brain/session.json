@@ -1,45 +1,45 @@
 {
-  "updated_at": "2026-05-12T18:57:00Z",
+  "updated_at": "2026-05-12T19:35:00Z",
   "working_on": {
-    "feature": "Vercel Backend Integration",
-    "task": "Finalize Phase 05 - Android & Backend Synchronization",
-    "status": "completed",
+    "feature": "Vercel Backend Deployment",
+    "task": "Phase 03 - Android Environment Setup",
+    "status": "in-progress",
     "files": [
-      "app/src/main/java/com/tracuutiemchung/app/MainActivity.kt",
-      "vercel-backend/core/parser.py",
-      "vercel-backend/services/analyzer_service.py"
+      "vercel-backend/vercel.json",
+      "README.md",
+      "plans/260512-1901-production-deployment/phase-03-android-env.md"
     ]
   },
   "recent_changes": [
     {
-      "type": "integration",
-      "description": "Connected Android app to Vercel API, replacing local engine",
-      "files": ["MainActivity.kt", "VercelPortalRepository.kt"]
+      "type": "deployment",
+      "description": "Fixed Vercel build failure by updating vercel.json to modern standard and setting Root Directory",
+      "files": ["vercel.json"]
     },
     {
-      "type": "fix",
-      "description": "Improved HTML parser to handle brand/disease sublabels (e.g. Varivax)",
-      "files": ["parser.py"]
+      "type": "refactor",
+      "description": "Switched to X-API-KEY header for backend security and added health check with Redis validation",
+      "files": ["api/index.py", "tests/test_api_endpoints.py"]
     },
     {
-      "type": "infra",
-      "description": "Pushed project to GitHub with comprehensive documentation",
-      "files": ["README.md", ".gitignore"]
+      "type": "docs",
+      "description": "Created comprehensive README.md in Vietnamese and updated project plans",
+      "files": ["README.md", "phase-02-deployment.md"]
     }
   ],
   "decisions_made": [
     {
-      "decision": "Remove Login screen from Android",
-      "reason": "Backend handles portal session/auth, Android only needs API Key"
+      "decision": "Use Upstash Redis (Free Tier)",
+      "reason": "Solves serverless timeout issues by caching portal sessions effectively"
     },
     {
-      "decision": "Normalize rules on-load in Python",
-      "reason": "Ensures exact matching with normalized history names"
+      "decision": "Custom Header X-API-KEY",
+      "reason": "Standard way to protect internal APIs, easy to configure on Vercel"
     }
   ],
   "next_steps": [
-    "Test with more real-world datasets",
-    "Implement push notifications for next dose reminders",
-    "Add more vaccine rules to assets/vaccine_rules.json"
+    "Verify successful build on Vercel dashboard",
+    "Configure Android app with Production Vercel URL and X-API-KEY",
+    "Run end-to-end testing with Android emulator connecting to Vercel"
   ]
 }
