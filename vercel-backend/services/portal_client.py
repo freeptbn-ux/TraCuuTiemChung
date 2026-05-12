@@ -120,10 +120,13 @@ class PortalClient:
             birth = cells[4].get_text(strip=True)
             code = patient_codes[idx] if idx < len(patient_codes) else None
             
+            gender = cells[5].get_text(strip=True) if len(cells) > 5 else "N/A"
+            
             results.append({
-                "patient_id": id_value,
+                "id": id_value,
                 "name": name,
                 "dob": birth,
+                "gender": gender,
                 "code": code
             })
         return results
