@@ -13,7 +13,7 @@ HTML_VACCINE_TABLE_ID = 'tblVacxin'
 
 class HTMLVaccineParser:
     def __init__(self, html_content: str):
-        self.soup = BeautifulSoup(html_content, 'lxml')
+        self.soup = BeautifulSoup(html_content, 'html.parser')
         self.normalize_vaccine_name = normalize_vaccine_name
 
     def extract_patient_info(self):
