@@ -1,0 +1,45 @@
+{
+  "updated_at": "2026-05-12T18:57:00Z",
+  "working_on": {
+    "feature": "Vercel Backend Integration",
+    "task": "Finalize Phase 05 - Android & Backend Synchronization",
+    "status": "completed",
+    "files": [
+      "app/src/main/java/com/tracuutiemchung/app/MainActivity.kt",
+      "vercel-backend/core/parser.py",
+      "vercel-backend/services/analyzer_service.py"
+    ]
+  },
+  "recent_changes": [
+    {
+      "type": "integration",
+      "description": "Connected Android app to Vercel API, replacing local engine",
+      "files": ["MainActivity.kt", "VercelPortalRepository.kt"]
+    },
+    {
+      "type": "fix",
+      "description": "Improved HTML parser to handle brand/disease sublabels (e.g. Varivax)",
+      "files": ["parser.py"]
+    },
+    {
+      "type": "infra",
+      "description": "Pushed project to GitHub with comprehensive documentation",
+      "files": ["README.md", ".gitignore"]
+    }
+  ],
+  "decisions_made": [
+    {
+      "decision": "Remove Login screen from Android",
+      "reason": "Backend handles portal session/auth, Android only needs API Key"
+    },
+    {
+      "decision": "Normalize rules on-load in Python",
+      "reason": "Ensures exact matching with normalized history names"
+    }
+  ],
+  "next_steps": [
+    "Test with more real-world datasets",
+    "Implement push notifications for next dose reminders",
+    "Add more vaccine rules to assets/vaccine_rules.json"
+  ]
+}
