@@ -117,10 +117,21 @@ class AnalyzerService:
                 "message": item.get("description"),
                 "status_tags": tags
             })
+            
+        # Format administered vaccines for Android app
+        formatted_history = []
+        for rec in vaccine_history:
+            formatted_history.append({
+                "vaccine_name": rec.get("vaccine_name", ""),
+                "date": rec.get("date", ""),
+                "dose": rec.get("dose", ""),
+                "provider": "VNCDC"
+            })
 
         return {
             "patient_name": patient_info.get("name"),
             "dob": dob_str,
             "analysis_date": system_date_str,
-            "missing_vaccines": formatted_recommendations
+            "missing_vaccines": formatted_recommendations,
+            "administered_vaccines": formatted_history
         }

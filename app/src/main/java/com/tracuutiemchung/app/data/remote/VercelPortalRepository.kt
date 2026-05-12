@@ -1,6 +1,5 @@
 package com.tracuutiemchung.app.data.remote
 
-import com.tracuutiemchung.app.BuildConfig
 import com.tracuutiemchung.app.data.model.*
 import com.tracuutiemchung.app.data.portal.*
 import com.tracuutiemchung.app.data.remote.model.AnalysisRequestDto
@@ -13,8 +12,7 @@ class VercelPortalRepository(
     override suspend fun searchPatientsByPhone(phone: String): Result<List<PortalPatientSummary>> {
         return try {
             val response = apiService.lookupPatients(
-                request = mapOf("phone" to phone),
-                apiKey = BuildConfig.VERCEL_API_KEY
+                request = mapOf("phone" to phone)
             )
             if (response.isSuccessful) {
                 val body = response.body()
@@ -47,8 +45,7 @@ class VercelPortalRepository(
     suspend fun analyze(patientId: String, phone: String): Result<AnalysisResult> {
         return try {
             val response = apiService.analyzeVaccinations(
-                request = AnalysisRequestDto(patientId, phone),
-                apiKey = BuildConfig.VERCEL_API_KEY
+                request = AnalysisRequestDto(patientId, phone)
             )
             if (response.isSuccessful) {
                 val body = response.body()
@@ -60,10 +57,18 @@ class VercelPortalRepository(
                         dateOfBirth = data.dob
                     )
                     val recommendations = data.missingVaccines.map { it.toDomain() }
+                    val records = data.administeredVaccines.map {
+                        VaccinationRecord(
+                            vaccineName = it.vaccineName,
+                            vaccinationDate = it.date,
+                            doseNumber = it.dose,
+                            provider = it.provider ?: "VNCDC"
+                        )
+                    }
                     
                     Result.success(AnalysisResult(
                         patientInfo = patientInfo,
-                        records = emptyList(), // Summary doesn't return full records to save bandwidth
+                        records = records,
                         recommendations = recommendations,
                         warnings = emptyList()
                     ))

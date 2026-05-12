@@ -35,9 +35,18 @@ data class RecommendationDto(
 )
 
 @Serializable
+data class RecordDto(
+    @SerialName("vaccine_name") val vaccineName: String,
+    val date: String,
+    val dose: String? = null,
+    val provider: String? = null
+)
+
+@Serializable
 data class AnalysisResponseDto(
     @SerialName("patient_name") val patientName: String,
     val dob: String,
     @SerialName("analysis_date") val analysisDate: String,
-    @SerialName("missing_vaccines") val missingVaccines: List<RecommendationDto>
+    @SerialName("missing_vaccines") val missingVaccines: List<RecommendationDto>,
+    @SerialName("administered_vaccines") val administeredVaccines: List<RecordDto> = emptyList()
 )
