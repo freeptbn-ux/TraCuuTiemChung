@@ -93,9 +93,34 @@ class AnalyzerService:
             other_standard_vaccines
         )
 
+        # Format results to match Android RecommendationDto
+        formatted_recommendations = []
+        for item in results:
+            tags = item.get("status_tags", [])
+            
+            # Simple status mapping logic
+            status = "DUE_LATER"
+            if "due" in tags or "eligible" in tags:
+                status = "DUE_NOW"
+            elif "overdue" in tags:
+                status = "OVERDUE"
+            elif "error" in "".join(tags) or "warning" in tags:
+                status = "NEEDS_REVIEW"
+            elif "completed" in tags:
+                status = "COMPLETED"
+            
+            formatted_recommendations.append({
+                "vaccine_name": item.get("vaccine_name_for_popup"),
+                "rule_type": "standard", # Placeholder
+                "status": status,
+                "next_dose": item.get("earliest_next_dose_date").strftime("%d/%m/%Y") if item.get("earliest_next_dose_date") and hasattr(item.get("earliest_next_dose_date"), "strftime") else item.get("earliest_next_dose_date"),
+                "message": item.get("description"),
+                "status_tags": tags
+            })
+
         return {
             "patient_name": patient_info.get("name"),
             "dob": dob_str,
             "analysis_date": system_date_str,
-            "missing_vaccines": results
+            "missing_vaccines": formatted_recommendations
         }
