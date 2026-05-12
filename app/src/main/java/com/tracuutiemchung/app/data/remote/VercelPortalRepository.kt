@@ -61,7 +61,7 @@ class VercelPortalRepository(
                         VaccinationRecord(
                             vaccineName = it.vaccineName,
                             vaccinationDate = it.date,
-                            doseNumber = it.dose,
+                            doseNumber = it.dose?.toIntOrNull(),
                             provider = it.provider ?: "VNCDC"
                         )
                     }
