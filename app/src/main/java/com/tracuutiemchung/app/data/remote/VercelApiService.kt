@@ -10,13 +10,11 @@ interface VercelApiService {
 
     @POST("api/lookup")
     suspend fun lookupPatients(
-        @Body request: Map<String, String>,
-        @Header("X-API-KEY") apiKey: String
+        @Body request: Map<String, String>
     ): Response<VercelResponse<List<PatientLookupDto>>>
 
     @POST("api/analyze")
     suspend fun analyzeVaccinations(
-        @Body request: AnalysisRequestDto,
-        @Header("X-API-KEY") apiKey: String
+        @Body request: AnalysisRequestDto
     ): Response<VercelResponse<AnalysisResponseDto>>
 }

@@ -33,6 +33,12 @@ class PhoneLookupViewModel(
     private val _uiState = MutableStateFlow<LookupUiState>(LookupUiState.Idle)
     val uiState: StateFlow<LookupUiState> = _uiState.asStateFlow()
 
+    private val _lastResult = MutableStateFlow<AnalysisResult?>(null)
+    val lastResult: StateFlow<AnalysisResult?> = _lastResult.asStateFlow()
+
+    private val _patients = MutableStateFlow<List<PortalPatientSummary>>(emptyList())
+    val patients: StateFlow<List<PortalPatientSummary>> = _patients.asStateFlow()
+
     fun validatePhone(phone: String): Boolean = Regex("^0\\d{9}$").matches(phone.trim())
 
     fun lookup(phone: String) = search(phone)
@@ -49,6 +55,7 @@ class PhoneLookupViewModel(
             val result = lookupVaccinationByPhone.searchPatients(normalizedPhone)
             _uiState.value = result.fold(
                 onSuccess = { patients ->
+                    _patients.value = patients
                     when (patients.size) {
                         0 -> LookupUiState.Error("Không tìm thấy dữ liệu tiêm chủng.")
                         else -> LookupUiState.PatientSelection(normalizedPhone, patients)
@@ -63,7 +70,10 @@ class PhoneLookupViewModel(
         viewModelScope.launch(dispatcher) {
             _uiState.value = LookupUiState.LoadingDetail(patient)
             _uiState.value = lookupVaccinationByPhone.lookupPatient(patient).fold(
-                onSuccess = { LookupUiState.Success(it) },
+                onSuccess = { 
+                    _lastResult.value = it
+                    LookupUiState.Success(it) 
+                },
                 onFailure = ::failureState,
             )
         }
@@ -71,6 +81,8 @@ class PhoneLookupViewModel(
 
     fun resetToSearch() {
         _uiState.value = LookupUiState.Idle
+        _patients.value = emptyList()
+        _lastResult.value = null
     }
 
     private fun failureState(error: Throwable): LookupUiState = when (error) {

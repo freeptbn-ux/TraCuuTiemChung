@@ -27,7 +27,8 @@
     "patterns": [
       "Client-Server architecture with centralized analysis engine",
       "Sublabel-aware HTML parsing to avoid brand/disease name collision",
-      "Serverless-friendly session management using Upstash Redis"
+      "Serverless-friendly session management using Upstash Redis",
+      "Predictive Back Gesture support for modern Android navigation"
     ],
     "gotchas": [
       "VNCDC Portal uses sublabels for disease names which must be stripped for brand-matching",

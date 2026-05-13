@@ -19,11 +19,17 @@ object RetrofitClient {
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
         .writeTimeout(60, TimeUnit.SECONDS)
+        .addInterceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("X-API-KEY", BuildConfig.X_API_KEY)
+                .build()
+            chain.proceed(request)
+        }
         .build()
 
     val apiService: VercelApiService by lazy {
         Retrofit.Builder()
-            .baseUrl(BuildConfig.VERCEL_API_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()

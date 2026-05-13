@@ -1,45 +1,41 @@
 {
-  "updated_at": "2026-05-12T19:35:00Z",
+  "updated_at": "2026-05-13T19:43:00Z",
   "working_on": {
-    "feature": "Vercel Backend Deployment",
-    "task": "Phase 03 - Android Environment Setup",
-    "status": "in-progress",
+    "feature": "Modern Back Gesture Support",
+    "task": "Phase 02 - Verification & Logcat Check",
+    "status": "completed",
     "files": [
-      "vercel-backend/vercel.json",
-      "README.md",
-      "plans/260512-1901-production-deployment/phase-03-android-env.md"
+      "app/src/main/AndroidManifest.xml",
+      "test/back_gesture_test.py",
+      "plans/260513-1915-modern-back-gesture/plan.md"
     ]
   },
   "recent_changes": [
     {
-      "type": "deployment",
-      "description": "Fixed Vercel build failure by updating vercel.json to modern standard and setting Root Directory",
-      "files": ["vercel.json"]
+      "type": "feature",
+      "description": "Enabled Predictive Back Gesture by adding enableOnBackInvokedCallback to Manifest",
+      "files": ["AndroidManifest.xml"]
     },
     {
-      "type": "refactor",
-      "description": "Switched to X-API-KEY header for backend security and added health check with Redis validation",
-      "files": ["api/index.py", "tests/test_api_endpoints.py"]
+      "type": "test",
+      "description": "Created automated test script for back gesture verification and Logcat monitoring",
+      "files": ["test/back_gesture_test.py"]
     },
     {
-      "type": "docs",
-      "description": "Created comprehensive README.md in Vietnamese and updated project plans",
-      "files": ["README.md", "phase-02-deployment.md"]
+      "type": "fix",
+      "description": "Verified navigation flow stability between lookup, selection, and results screens",
+      "files": ["MainActivity.kt"]
     }
   ],
   "decisions_made": [
     {
-      "decision": "Use Upstash Redis (Free Tier)",
-      "reason": "Solves serverless timeout issues by caching portal sessions effectively"
-    },
-    {
-      "decision": "Custom Header X-API-KEY",
-      "reason": "Standard way to protect internal APIs, easy to configure on Vercel"
+      "decision": "Enable enableOnBackInvokedCallback",
+      "reason": "Required for Target SDK 35 to support system back animations and avoid Logcat warnings"
     }
   ],
   "next_steps": [
-    "Verify successful build on Vercel dashboard",
-    "Configure Android app with Production Vercel URL and X-API-KEY",
-    "Run end-to-end testing with Android emulator connecting to Vercel"
+    "Monitor user feedback on back gesture behavior",
+    "Consider implementing custom OnBackInvokedCallback for complex UI transitions if needed",
+    "Prepare for next phase of UI enhancements"
   ]
 }

@@ -1,8 +1,10 @@
 package com.tracuutiemchung.app.data.model
 
+import androidx.annotation.Keep
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
 
+@Keep
 @Serializable
 data class PatientInfo(
     val fullName: String,
@@ -11,6 +13,7 @@ data class PatientInfo(
     val address: String? = null,
 )
 
+@Keep
 @Serializable
 data class VaccinationRecord(
     val vaccineName: String,
@@ -19,6 +22,7 @@ data class VaccinationRecord(
     val provider: String? = null,
 )
 
+@Keep
 @Serializable
 enum class RecommendationStatus {
     COMPLETED,
@@ -29,6 +33,7 @@ enum class RecommendationStatus {
     NOT_ENOUGH_DATA,
 }
 
+@Keep
 @Serializable
 data class VaccineRecommendation(
     val vaccineName: String,
@@ -41,6 +46,7 @@ data class VaccineRecommendation(
     val statusTags: List<String> = emptyList(),
 )
 
+@Keep
 @Serializable
 data class AnalysisResult(
     val patientInfo: PatientInfo,

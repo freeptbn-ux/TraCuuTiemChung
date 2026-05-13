@@ -5,8 +5,9 @@ Hệ thống **TraCuuTiemChung** được thiết kế theo kiến trúc Client-
 
 ## 📱 Android Client
 - **Tech Stack**: Kotlin, Jetpack Compose, Retrofit.
-- **Vai trò**: 
-    - Hiển thị giao diện người dùng.
+- **Android Features**: 
+    - Hiển thị giao diện người dùng (Jetpack Compose).
+    - Modern Back Gesture: Hỗ trợ Predictive Back Navigation (Android 13+).
     - Nhận input (SĐT) và gửi yêu cầu tới Backend.
     - Hiển thị kết quả phân tích dưới dạng Dashboard/Report.
 - **Security**: Lưu trữ API Key an toàn, không chứa logic cào dữ liệu nhạy cảm.

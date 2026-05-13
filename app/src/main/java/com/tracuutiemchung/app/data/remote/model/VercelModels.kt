@@ -1,8 +1,10 @@
 package com.tracuutiemchung.app.data.remote.model
 
+import androidx.annotation.Keep
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Keep
 @Serializable
 data class VercelResponse<T>(
     val status: String,
@@ -10,6 +12,7 @@ data class VercelResponse<T>(
     val detail: String? = null
 )
 
+@Keep
 @Serializable
 data class PatientLookupDto(
     val id: String,
@@ -18,12 +21,14 @@ data class PatientLookupDto(
     val gender: String
 )
 
+@Keep
 @Serializable
 data class AnalysisRequestDto(
     @SerialName("patient_id") val patientId: String,
     val phone: String
 )
 
+@Keep
 @Serializable
 data class RecommendationDto(
     @SerialName("vaccine_name") val vaccineName: String,
@@ -34,6 +39,7 @@ data class RecommendationDto(
     @SerialName("status_tags") val statusTags: List<String> = emptyList()
 )
 
+@Keep
 @Serializable
 data class RecordDto(
     @SerialName("vaccine_name") val vaccineName: String,
@@ -42,6 +48,7 @@ data class RecordDto(
     val provider: String? = null
 )
 
+@Keep
 @Serializable
 data class AnalysisResponseDto(
     @SerialName("patient_name") val patientName: String,

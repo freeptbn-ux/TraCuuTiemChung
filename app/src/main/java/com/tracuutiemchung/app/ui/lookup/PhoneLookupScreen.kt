@@ -6,10 +6,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -35,77 +38,119 @@ import androidx.compose.ui.unit.dp
 import com.tracuutiemchung.app.data.model.AnalysisResult
 import com.tracuutiemchung.app.data.portal.PortalPatientSummary
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.text.style.TextOverflow
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhoneLookupScreen(
     viewModel: PhoneLookupViewModel,
-    onLookupSuccess: (AnalysisResult) -> Unit,
+    onNavigateToSelection: (String) -> Unit,
+    onNavigateToResult: (String) -> Unit,
     onSessionExpired: () -> Unit,
 ) {
     var phoneNumber by remember { mutableStateOf("") }
     val state by viewModel.uiState.collectAsState()
 
     LaunchedEffect(state) {
-        if (state is LookupUiState.Success) {
-            onLookupSuccess((state as LookupUiState.Success).result)
+        when (state) {
+            is LookupUiState.PatientSelection -> {
+                onNavigateToSelection((state as LookupUiState.PatientSelection).phone)
+            }
+            is LookupUiState.Success -> {
+                onNavigateToResult((state as LookupUiState.Success).result.patientInfo.phoneNumber)
+            }
+            else -> Unit
         }
     }
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background,
-    ) {
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        "Tra Cứu Tiêm Chủng",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                )
+            )
+        }
+    ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp, vertical = 28.dp),
-            contentAlignment = Alignment.Center,
+                .padding(paddingValues)
+                .padding(16.dp),
+            contentAlignment = Alignment.TopCenter,
         ) {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(28.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
+                // Header section
                 Column(
-                    modifier = Modifier
-                        .padding(22.dp)
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(14.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "Tra cứu lịch sử tiêm",
+                        text = "Chào mừng bạn",
                         style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "Nhập đúng một số điện thoại để xem lịch sử và khuyến nghị.",
+                        text = "Tra cứu lịch sử và nhận khuyến nghị tiêm chủng",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
                     )
-                    when (val current = state) {
-                        LookupUiState.Idle,
-                        is LookupUiState.Error,
-                        LookupUiState.Loading,
-                        -> SearchForm(
-                            phoneNumber = phoneNumber,
-                            onPhoneChange = { phoneNumber = it },
-                            isLoading = current == LookupUiState.Loading,
-                            errorMessage = (current as? LookupUiState.Error)?.message,
-                            onSearch = { viewModel.search(phoneNumber) },
-                        )
-                        is LookupUiState.PatientSelection -> PatientSelectionList(
-                            phone = current.phone,
-                            patients = current.patients,
-                            onSelectPatient = viewModel::selectPatient,
-                            onEditPhone = {
-                                phoneNumber = current.phone
-                                viewModel.resetToSearch()
-                            },
-                        )
-                        is LookupUiState.LoadingDetail -> LoadingDetailContent(current.patient)
-                        LookupUiState.SessionExpired -> SessionExpiredContent(onSessionExpired)
-                        is LookupUiState.Success -> Unit
+                }
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.extraLarge,
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                    border = androidx.compose.foundation.BorderStroke(
+                        1.dp,
+                        MaterialTheme.colorScheme.outlineVariant
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(24.dp),
+                        verticalArrangement = Arrangement.spacedBy(20.dp)
+                    ) {
+                        when (val current = state) {
+                            LookupUiState.Idle,
+                            is LookupUiState.Error,
+                            LookupUiState.Loading,
+                            -> SearchForm(
+                                phoneNumber = phoneNumber,
+                                onPhoneChange = { phoneNumber = it },
+                                isLoading = current == LookupUiState.Loading,
+                                errorMessage = (current as? LookupUiState.Error)?.message,
+                                onSearch = { viewModel.search(phoneNumber) },
+                            )
+                            is LookupUiState.PatientSelection,
+                            is LookupUiState.LoadingDetail -> Unit
+                            LookupUiState.SessionExpired -> SessionExpiredContent(onSessionExpired)
+                            is LookupUiState.Success -> Unit
+                        }
                     }
                 }
             }
@@ -121,118 +166,74 @@ private fun SearchForm(
     errorMessage: String?,
     onSearch: () -> Unit,
 ) {
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = phoneNumber,
-        onValueChange = onPhoneChange,
-        label = { Text("Số điện thoại") },
-        singleLine = true,
-        enabled = !isLoading,
-    )
-    Button(
-        modifier = Modifier.fillMaxWidth(),
-        enabled = !isLoading,
-        onClick = onSearch,
-    ) {
-        if (isLoading) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier.semantics { contentDescription = "Đang tra cứu" },
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    strokeWidth = 2.dp,
-                )
-                Text("Đang tra cứu...")
-            }
-        } else {
-            Text("Tra cứu")
-        }
-    }
-    errorMessage?.let {
-        Text(
-            text = it,
-            color = MaterialTheme.colorScheme.error,
-            style = MaterialTheme.typography.bodyMedium,
-        )
-    }
-}
-
-@Composable
-fun PatientSelectionList(
-    phone: String,
-    patients: List<PortalPatientSummary>,
-    onSelectPatient: (PortalPatientSummary) -> Unit,
-    onEditPhone: () -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text(
-            text = "Chọn đúng người cần tra cứu tiêm chủng",
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
-        )
-        Text(
-            text = "Số điện thoại: $phone • ${patients.size} hồ sơ phù hợp",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        patients.forEach { patient ->
-            PatientSummaryCard(
-                patient = patient,
-                onClick = { onSelectPatient(patient) },
-            )
-        }
-        OutlinedButton(
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            onClick = onEditPhone,
+            value = phoneNumber,
+            onValueChange = onPhoneChange,
+            label = { Text("Số điện thoại") },
+            placeholder = { Text("0123 456 789") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Phone,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            },
+            singleLine = true,
+            enabled = !isLoading,
+            shape = MaterialTheme.shapes.medium,
+            isError = errorMessage != null,
+            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                keyboardType = androidx.compose.ui.text.input.KeyboardType.Phone
+            )
+        )
+        
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 4.dp)
+            )
+        }
+
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            enabled = !isLoading && phoneNumber.isNotBlank(),
+            onClick = onSearch,
+            shape = MaterialTheme.shapes.medium,
+            contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 24.dp)
         ) {
-            Text("Nhập số điện thoại khác")
+            if (isLoading) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .semantics { contentDescription = "Đang tra cứu" },
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        strokeWidth = 2.5.dp,
+                    )
+                    Text("Đang xử lý...", style = MaterialTheme.typography.titleMedium)
+                }
+            } else {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(imageVector = Icons.Default.Search, contentDescription = null)
+                    Text("Tra cứu ngay", style = MaterialTheme.typography.titleMedium)
+                }
+            }
         }
     }
 }
 
-@Composable
-fun PatientSummaryCard(
-    patient: PortalPatientSummary,
-    onClick: () -> Unit,
-) {
-    val secondaryLine = listOfNotNull(
-        patient.birthDateOrYear,
-        patient.gender,
-        patient.phone,
-    ).joinToString(" • ")
-    val identifier = patient.receivedDate ?: patient.patientId
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .semantics {
-                contentDescription = "Hồ sơ ${patient.fullName}, $secondaryLine, ${patient.address.orEmpty()}, mã $identifier"
-            },
-        onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp),
-        ) {
-            Text(patient.fullName, fontWeight = FontWeight.SemiBold)
-            if (secondaryLine.isNotBlank()) {
-                Text(secondaryLine, style = MaterialTheme.typography.bodyMedium)
-            }
-            patient.address?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
-            Text(
-                text = if (patient.receivedDate != null) {
-                    "Ngày tiếp nhận: ${patient.receivedDate}"
-                } else {
-                    "Mã hồ sơ: ${patient.patientId}"
-                },
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-            )
-        }
-    }
-}
 
 @Composable
 private fun LoadingDetailContent(patient: PortalPatientSummary) {

@@ -2,10 +2,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".TraCuuTiemChungApplication"
         android:allowBackup="true"
         android:label="Tra cứu tiêm chủng"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TraCuuTiemChung">
+        android:theme="@style/Theme.TraCuuTiemChung"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:enableOnBackInvokedCallback="true">
         <activity
             android:name=".MainActivity"
             android:exported="true">

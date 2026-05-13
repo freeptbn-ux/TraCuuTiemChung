@@ -1,5 +1,11 @@
 # Changelog
 
+## [2026-05-13]
+### Added
+- **Predictive Back Gesture Support**: Kích hoạt `android:enableOnBackInvokedCallback="true"` trong Manifest để hỗ trợ cử chỉ quay lại hiện đại trên Android 13+ (Target SDK 35).
+- **Back Gesture Test Suite**: Thêm script Python `test/back_gesture_test.py` để tự động hóa việc xác minh cử chỉ quay lại và kiểm tra lỗi Logcat.
+- **Improved Navigation Stack**: Sửa lỗi điều hướng back-stack giúp ứng dụng không bị thoát đột ngột khi quay lại từ các màn hình con.
+
 ## [2026-05-12]
 ### Added
 - **Vercel Backend**: Hệ thống FastAPI hỗ trợ tra cứu và phân tích tiêm chủng từ xa.
