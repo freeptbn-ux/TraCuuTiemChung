@@ -1,0 +1,626 @@
+{
+  "MMR_Group": {
+    "group_display_name": "Vắc xin Sởi-Quai bị-Rubella (MMR-II/Priorix)",
+    "type": "mmr_equivalent_group",
+    "is_live": true,
+    "raw_names_members": {
+      "MMR2": [
+        "MMR-II",
+        "MMR II & Diluent inj 0.5ml"
+      ],
+      "PRIORIX": [
+        "Priorix"
+      ]
+    },
+    "min_age_months_overall_group": 9,
+    "provides_measles_protection_group": true,
+    "regimens": [
+      {
+        "regimen_name": "Phác đồ 3 mũi (nếu mũi 1 tiêm lúc 9-<12 tháng tuổi, thường dùng Priorix)",
+        "min_age_at_first_dose_months": 9,
+        "max_age_at_first_dose_months": 11,
+        "doses_required": 3,
+        "min_interval_days": [
+          null,
+          90,
+          1095
+        ],
+        "dose_specific_rules": {
+          "3": {
+            "alternative_min_age_years": 4,
+            "alternative_max_age_years": 7
+          }
+        }
+      },
+      {
+        "regimen_name": "Phác đồ 2 mũi (nếu mũi 1 tiêm lúc >=12 tháng - <7 tuổi)",
+        "min_age_at_first_dose_months": 12,
+        "max_age_at_first_dose_months": 83,
+        "doses_required": 2,
+        "min_interval_days": [
+          null,
+          90
+        ],
+        "dose_specific_rules": {
+          "2": {
+            "alternative_min_age_years": 4,
+            "alternative_max_age_years": 7
+          }
+        }
+      },
+      {
+        "regimen_name": "Phác đồ 2 mũi (nếu mũi 1 tiêm lúc >=7 tuổi hoặc người lớn)",
+        "min_age_at_first_dose_months": 84,
+        "doses_required": 2,
+        "min_interval_days": [
+          null,
+          28
+        ]
+      }
+    ]
+  },
+  "Varivax": {
+    "display_name": "Varivax (Thủy đậu)",
+    "raw_names": [
+      "Varivax",
+      "Varivax & Diluent Inj 0.5ml",
+      "Varilrix",
+      "Varicella"
+    ],
+    "is_live": true,
+    "doses_required": 2,
+    "min_interval_days": [
+      null,
+      90
+    ],
+    "min_age_months_at_first_dose": 12,
+    "type": "single_series"
+  },
+  "MeningococcalACYW_Group": {
+    "group_display_name": "Vắc xin Não mô cầu ACYW-135 (Menactra/MenQuadfi)",
+    "type": "meningococcal_acyw_group",
+    "members": {
+      "MENACTRA": {
+        "raw_names": [
+          "MENACTRA"
+        ],
+        "display": "Menactra (Sanofi Pasteur)",
+        "min_age_months_overall": 9,
+        "rules_by_age": [
+          {
+            "max_age_at_first_dose_months": 23,
+            "doses_required": 2,
+            "min_interval_days": [
+              null,
+              90
+            ]
+          },
+          {
+            "min_age_at_first_dose_months": 24,
+            "doses_required": 1,
+            "min_interval_days": [
+              null
+            ]
+          }
+        ]
+      },
+      "MENQUADFI": {
+        "raw_names": [
+          "MenQuadfi",
+          "MENQUADFI"
+        ],
+        "display": "MenQuadfi (Sanofi Pasteur)",
+        "min_age_weeks_overall": 6,
+        "rules_by_age": [
+          {
+            "min_age_weeks_at_first_dose": 6,
+            "max_age_at_first_dose_months": 5,
+            "doses_required": 3,
+            "min_interval_days": [
+              null,
+              60,
+              60
+            ],
+            "booster": {
+              "min_age_months": 12,
+              "min_interval_days_from_last": 60,
+              "description": "Mũi nhắc: từ 12 tháng tuổi, cách mũi 3 ít nhất 2 tháng"
+            }
+          },
+          {
+            "min_age_at_first_dose_months": 6,
+            "max_age_at_first_dose_months": 11,
+            "doses_required": 1,
+            "min_interval_days": [
+              null
+            ],
+            "booster": {
+              "min_age_months": 12,
+              "min_interval_days_from_last": 60,
+              "description": "Mũi nhắc: từ 12 tháng tuổi, cách mũi 1 ít nhất 2 tháng"
+            }
+          },
+          {
+            "min_age_at_first_dose_months": 12,
+            "doses_required": 1,
+            "min_interval_days": [
+              null
+            ]
+          }
+        ]
+      }
+    },
+    "interactions": {
+      "VA-MENGOC-BC": {
+        "min_interval_days": 60,
+        "applies_when_age_months_gte": 24,
+        "direction": "before_menquadfi",
+        "severity": "warning",
+        "message": "Trẻ từ 2 tuổi trở lên: VA-Mengoc BC nên tiêm sau MenQuadfi/Menactra. Nếu tiêm VA-Mengoc BC trước, cần cách tối thiểu 2 tháng."
+      },
+      "Six_In_One_Combined": {
+        "min_interval_days": 30,
+        "direction": "before_menquadfi",
+        "severity": "warning",
+        "message": "Nếu đã tiêm 6in1 trước, MenQuadfi nên cách ít nhất 1 tháng."
+      }
+    }
+  },
+  "JE_Group": {
+    "group_display_name": "Vắc xin Viêm não Nhật Bản (Imojev/JEEV/Jevax)",
+    "type": "group_alternative_courses_age_range",
+    "courses": [
+      {
+        "raw_names": [
+          "Imojev"
+        ],
+        "doses_required": 2,
+        "display": "Imojev (Sanofi Pasteur)",
+        "min_age_months_at_first_dose": 9,
+        "min_interval_days": [
+          null,
+          360
+        ],
+        "is_live": true
+      },
+      {
+        "raw_names": [
+          "JEEV 3mcg/0,5ml",
+          "JEEV"
+        ],
+        "doses_required": 2,
+        "display": "JEEV (Biological E Limited)",
+        "min_age_months_at_first_dose": 12,
+        "max_age_years_at_first_dose": 50,
+        "min_interval_days": [
+          null,
+          30
+        ],
+        "is_live": true
+      },
+      {
+        "raw_names": [
+          "VNNB",
+          "Jevax",
+          "Jevax (Lọ 1 liều 0.5ml)",
+          "Jevax (Lọ 1 liều 1ml)",
+          "Jevax (Lọ 5 liều 5ml)"
+        ],
+        "doses_required": 3,
+        "display": "Jevax/VNNB (Việt Nam)",
+        "min_age_months_at_first_dose": 12,
+        "min_interval_days": [
+          null,
+          7,
+          365
+        ],
+        "booster_interval_years": 3,
+        "booster_after_dose_number": 3,
+        "booster_max_age_years": 15
+      }
+    ]
+  },
+  "VA-MENGOC-BC": {
+    "display_name": "VA - MENGOC - BC (Não mô cầu BC)",
+    "raw_names": [
+      "VA - MENGOC - BC"
+    ],
+    "doses_required": 2,
+    "min_interval_days": [
+      null,
+      42
+    ],
+    "min_age_months_at_first_dose": 6,
+    "type": "single_series"
+  },
+  "MVVAC": {
+    "display_name": "MVVAC (Sởi đơn)",
+    "raw_names": [
+      "MVVAC",
+      "Sởi"
+    ],
+    "is_live": true,
+    "doses_required": 1,
+    "min_age_months_at_first_dose": 9,
+    "type": "single_dose_min_age"
+  },
+  "TyphimVi": {
+    "display_name": "Typhim Vi (Thương hàn)",
+    "raw_names": [
+      "Typhim Vi"
+    ],
+    "doses_required": 1,
+    "min_age_years_at_first_dose": 2,
+    "type": "single_dose_min_age"
+  },
+  "Morcvax": {
+    "display_name": "Morcvax (Tả)",
+    "raw_names": [
+      "Morcvax"
+    ],
+    "doses_required": 2,
+    "min_interval_days": [
+      null,
+      14
+    ],
+    "min_age_years_at_first_dose": 2,
+    "type": "single_series_min_age"
+  },
+  "Six_In_One_Combined": {
+    "display_name": "Vắc xin 6 trong 1 (Hexaxim/Infanrix Hexa)",
+    "raw_names": [
+      "Infanrix Hexa",
+      "Hexaxim",
+      "DPT-VGB-HIB (SII)",
+      "Quinvaxem",
+      "DPT",
+      "ComBE Five",
+      "DPT (Lọ 1 liều)"
+    ],
+    "type": "single_series",
+    "doses_required": 4,
+    "min_interval_days": [
+      null,
+      30,
+      30,
+      360
+    ],
+    "min_age_weeks_at_first_dose": 6
+  },
+  "Rota": {
+    "group_display_name": "Vắc xin Rota",
+    "type": "group_alternative_courses_min_age",
+    "is_live": true,
+    "min_age_weeks_at_first_dose": 6,
+    "max_age_months_to_start_first_dose_group": 6,
+    "max_age_months_for_completion_group": 8,
+    "courses": [
+      {
+        "raw_names": [
+          "Rota Teq"
+        ],
+        "doses_required": 3,
+        "display": "Rota Teq (Mỹ)",
+        "min_interval_days": [
+          null,
+          30,
+          30
+        ]
+      },
+      {
+        "raw_names": [
+          "Rotarix 1.5ml",
+          "ROTARIXTM"
+        ],
+        "doses_required": 2,
+        "display": "Rotarix/ROTARIXTM (Bỉ)",
+        "min_interval_days": [
+          null,
+          30
+        ]
+      },
+      {
+        "raw_names": [
+          "Rotavin",
+          "Rotavin-M1"
+        ],
+        "doses_required": 2,
+        "display": "Rotavin/Rotavin-M1 (Việt Nam)",
+        "min_interval_days": [
+          null,
+          30
+        ]
+      }
+    ]
+  },
+  "Prevenar13": {
+    "display_name": "Prevenar 13 (Phế cầu)",
+    "raw_names": [
+      "Prevenar 13",
+      "prevenar-13"
+    ],
+    "type": "age_dependent_series",
+    "min_age_weeks_overall": 6,
+    "rules_by_age": [
+      {
+        "max_age_at_first_dose_months": 6,
+        "doses_required": 4,
+        "min_interval_days": [
+          null,
+          30,
+          30,
+          240
+        ]
+      },
+      {
+        "min_age_at_first_dose_months": 7,
+        "max_age_at_first_dose_months": 11,
+        "doses_required": 3,
+        "min_interval_days": [
+          null,
+          30,
+          180
+        ]
+      },
+      {
+        "min_age_at_first_dose_months": 12,
+        "max_age_at_first_dose_months": 23,
+        "doses_required": 2,
+        "min_interval_days": [
+          null,
+          60
+        ]
+      },
+      {
+        "min_age_at_first_dose_months": 24,
+        "doses_required": 1,
+        "min_interval_days": [
+          null
+        ]
+      }
+    ]
+  },
+  "Vaxneuvance": {
+    "display_name": "Vaxneuvance (Phế cầu)",
+    "raw_names": [
+      "Vaxneuvance"
+    ],
+    "type": "age_dependent_series",
+    "min_age_weeks_overall": 6,
+    "rules_by_age": [
+      {
+        "max_age_at_first_dose_months": 6,
+        "doses_required": 4,
+        "min_interval_days": [
+          null,
+          30,
+          30,
+          240
+        ]
+      },
+      {
+        "min_age_at_first_dose_months": 7,
+        "max_age_at_first_dose_months": 11,
+        "doses_required": 3,
+        "min_interval_days": [
+          null,
+          30,
+          180
+        ]
+      },
+      {
+        "min_age_at_first_dose_months": 12,
+        "max_age_at_first_dose_months": 23,
+        "doses_required": 2,
+        "min_interval_days": [
+          null,
+          60
+        ]
+      },
+      {
+        "min_age_at_first_dose_months": 24,
+        "doses_required": 1,
+        "min_interval_days": [
+          null
+        ]
+      }
+    ]
+  },
+  "Synflorix": {
+    "display_name": "Synflorix (Phế cầu)",
+    "raw_names": [
+      "Synflorix",
+      "synflorix"
+    ],
+    "type": "age_dependent_series",
+    "min_age_weeks_overall": 6,
+    "rules_by_age": [
+      {
+        "max_age_at_first_dose_months": 6,
+        "doses_required": 4,
+        "min_interval_days": [
+          null,
+          30,
+          30,
+          180
+        ]
+      },
+      {
+        "min_age_at_first_dose_months": 7,
+        "max_age_at_first_dose_months": 11,
+        "doses_required": 3,
+        "min_interval_days": [
+          null,
+          30,
+          60
+        ],
+        "dose_specific_rules": {
+          "2": {
+            "min_absolute_age_months": 12
+          }
+        }
+      },
+      {
+        "min_age_at_first_dose_months": 12,
+        "max_age_at_first_dose_months": 71,
+        "doses_required": 2,
+        "min_interval_days": [
+          null,
+          60
+        ]
+      }
+    ]
+  },
+  "Pneumovax23": {
+    "display_name": "Pneumovax 23 / PNEUMO 23 (Phế cầu)",
+    "raw_names": [
+      "Pneumovax 23",
+      "PNEUMO 23"
+    ],
+    "type": "single_dose_min_age",
+    "doses_required": 1,
+    "min_age_years_at_first_dose": 2
+  },
+  "HepA": {
+    "group_display_name": "Viêm Gan A",
+    "type": "group_alternative_courses_age_range",
+    "courses": [
+      {
+        "raw_names": [
+          "Avaxim 80U",
+          "Twinrix"
+        ],
+        "doses_required": 2,
+        "display": "Avaxim 80U (Pháp) / Twinrix",
+        "min_age_months_at_first_dose": 12,
+        "max_age_years_at_first_dose": 16,
+        "min_interval_days": [
+          null,
+          180
+        ]
+      },
+      {
+        "raw_names": [
+          "HAVAX"
+        ],
+        "doses_required": 2,
+        "display": "HAVAX (Việt Nam)",
+        "min_age_months_at_first_dose": 24,
+        "max_age_years_at_first_dose": 18,
+        "min_interval_days": [
+          null,
+          180
+        ]
+      }
+    ]
+  },
+  "Flu": {
+    "group_display_name": "Vắc xin Cúm",
+    "raw_names": [
+      "Vaxigrip Tetra 0.5ml",
+      "Influvac Tetra 20XX/20XX"
+    ],
+    "recognition_keywords": [
+      "vaxigrip",
+      "influvac",
+      "gc flu",
+      "ivacflu-s",
+      "vaxigrip 0.5ml",
+      "influvac tetra 2020/2021",
+      "influvac tetra 2021/2022",
+      "influvac tetra 2022/2023",
+      "influvac tetra 2023/2024",
+      "influvac tetra 2024/2025",
+      "influvac tetra 2025/2026",
+      "influvac tetra 2026/2027",
+      "influvac tetra 2027/2028",
+      "influvac tetra 2028/2029",
+      "influvac tetra 2029/2030",
+      "influvac tetra 2030/2031",
+      "influvac tetra 2031/2032",
+      "influvac tetra 2032/2033",
+      "influvac tetra 2033/2034",
+      "influvac tetra 2034/2035",
+      "influvac tetra 2035/2036",
+      "influvac tetra 2036/2037",
+      "influvac tetra 2037/2038",
+      "influvac tetra 2038/2039",
+      "influvac tetra 2039/2040",
+      "influvac tetra 2040/2041",
+      "influvac tetra 2041/2042",
+      "influvac tetra 2042/2043",
+      "influvac tetra 2043/2044",
+      "influvac tetra 2044/2045",
+      "influvac tetra 2045/2046",
+      "influvac tetra 2046/2047",
+      "influvac tetra 2047/2048",
+      "influvac tetra 2048/2049",
+      "influvac tetra 2049/2050",
+      "influvac tetra 2050/2051",
+      "influvac tetra 2051/2052",
+      "influvac tetra 2052/2053",
+      "influvac tetra 2053/2054",
+      "influvac tetra 2054/2055",
+      "influvac tetra 2055/2056",
+      "influvac tetra 2056/2057",
+      "influvac tetra 2057/2058",
+      "influvac tetra 2058/2059",
+      "influvac tetra 2059/2060",
+      "influvac tetra 2060/2061",
+      "influvac tetra 2061/2062",
+      "influvac tetra 2062/2063",
+      "influvac tetra 2063/2064",
+      "influvac tetra 2064/2065",
+      "influvac tetra 2065/2066",
+      "influvac tetra 2066/2067",
+      "influvac tetra 2067/2068",
+      "influvac tetra 2068/2069",
+      "influvac tetra 2069/2070",
+      "influvac tetra 2070/2071",
+      "influvac tetra 2071/2072",
+      "influvac tetra 2072/2073",
+      "influvac tetra 2073/2074",
+      "influvac tetra 2074/2075",
+      "influvac tetra 2075/2076",
+      "influvac tetra 2076/2077",
+      "influvac tetra 2077/2078",
+      "influvac tetra 2078/2079",
+      "influvac tetra 2079/2080",
+      "influvac tetra 2080/2081",
+      "influvac tetra 2081/2082",
+      "influvac tetra 2082/2083",
+      "influvac tetra 2083/2084",
+      "influvac tetra 2084/2085",
+      "influvac tetra 2085/2086",
+      "influvac tetra 2086/2087",
+      "influvac tetra 2087/2088",
+      "influvac tetra 2088/2089",
+      "influvac tetra 2089/2090",
+      "influvac tetra 2090/2091",
+      "influvac tetra 2091/2092",
+      "influvac tetra 2092/2093",
+      "influvac tetra 2093/2094",
+      "influvac tetra 2094/2095",
+      "influvac tetra 2095/2096",
+      "influvac tetra 2096/2097",
+      "influvac tetra 2097/2098",
+      "influvac tetra 2098/2099"
+    ],
+    "type": "flu_group",
+    "min_age_months_at_first_dose": 6,
+    "initial_series_interval_days": 30
+  },
+  "BCG": {
+    "display_name": "Lao (BCG)",
+    "raw_names": [
+      "BCG",
+      "Vắc xin phòng Lao (BCG)",
+      "Lao (BCG)",
+      "IVACTUBER-BCG"
+    ],
+    "doses_required": 1,
+    "min_age_days_at_first_dose": 0,
+    "max_age_months_at_first_dose": 12,
+    "type": "single_dose_min_age"
+  }
+}

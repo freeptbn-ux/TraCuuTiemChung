@@ -1,0 +1,234 @@
+{
+  "patient_name": "Nguyễn Duy Minh Khôi",
+  "dob": "27/07/2020",
+  "analysis_date": "12/05/2026",
+  "missing_vaccines": [
+    {
+      "vaccine_name": "Typhim Vi (Thương hàn)",
+      "rule_type": "standard",
+      "status": "DUE_NOW",
+      "next_dose": "12/05/2026",
+      "message": "Typhim Vi (Thương hàn) (Chưa tiêm - cần 1 liều). đủ điều kiện tuổi",
+      "status_tags": [
+        "eligible"
+      ]
+    },
+    {
+      "vaccine_name": "Morcvax (Tả)",
+      "rule_type": "standard",
+      "status": "DUE_NOW",
+      "next_dose": "12/05/2026",
+      "message": "Morcvax (Tả) (Chưa tiêm - cần 2 liều). đủ điều kiện tuổi",
+      "status_tags": [
+        "eligible"
+      ]
+    },
+    {
+      "vaccine_name": "Vắc xin Rota",
+      "rule_type": "standard",
+      "status": "DUE_LATER",
+      "next_dose": null,
+      "message": "Vắc xin Rota: Đã qua 6 tháng tuổi, không còn chỉ định bắt đầu.",
+      "status_tags": [
+        "too_old_to_start"
+      ]
+    },
+    {
+      "vaccine_name": "Viêm Gan A",
+      "rule_type": "standard",
+      "status": "DUE_NOW",
+      "next_dose": "12/05/2026",
+      "message": "Viêm Gan A: Chưa tiêm. Lựa chọn có thể tiêm: Avaxim 80U (Pháp) / Twinrix, HAVAX (Việt Nam).",
+      "status_tags": [
+        "due"
+      ]
+    },
+    {
+      "vaccine_name": "Vắc xin Cúm",
+      "rule_type": "standard",
+      "status": "DUE_LATER",
+      "next_dose": "16/11/2026",
+      "message": "Vắc xin Cúm - Lịch tiêm nhắc lại hàng năm tiếp theo.",
+      "status_tags": [
+        "info",
+        "booster_upcoming"
+      ]
+    }
+  ],
+  "administered_vaccines": [
+    {
+      "vaccine_name": "Influvac Tetra 2024/2025",
+      "date": "16/11/2025",
+      "dose": "1",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Varivax",
+      "date": "04/01/2025",
+      "dose": "2",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "MMR-II",
+      "date": "04/01/2025",
+      "dose": "2",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Influvac Tetra 2023/2024",
+      "date": "13/10/2024",
+      "dose": "1",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Vaxigrip Tetra 0.5ml",
+      "date": "13/08/2023",
+      "dose": "2",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "MENACTRA",
+      "date": "21/05/2023",
+      "dose": "1",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Imojev",
+      "date": "27/11/2022",
+      "dose": "2",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Vaxigrip Tetra 0.5ml",
+      "date": "24/07/2022",
+      "dose": "1",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Varivax",
+      "date": "02/04/2022",
+      "dose": "1",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Infanrix Hexa",
+      "date": "26/12/2021",
+      "dose": "4",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "MMR-II",
+      "date": "27/11/2021",
+      "dose": "1",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Influvac (Hộp 1 xy lanh)",
+      "date": "24/10/2021",
+      "dose": "2",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Influvac (Hộp 1 xy lanh)",
+      "date": "25/09/2021",
+      "dose": "1",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "VA - MENGOC - BC",
+      "date": "20/09/2021",
+      "dose": "2",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Prevenar 13",
+      "date": "29/08/2021",
+      "dose": "4",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Imojev",
+      "date": "15/08/2021",
+      "dose": "1",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "VA - MENGOC - BC",
+      "date": "17/07/2021",
+      "dose": "1",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "MVVAC",
+      "date": "19/06/2021",
+      "dose": "1",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Prevenar 13",
+      "date": "03/01/2021",
+      "dose": "3",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Rota Teq",
+      "date": "19/12/2020",
+      "dose": "3",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Infanrix Hexa",
+      "date": "19/12/2020",
+      "dose": "3",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Prevenar 13",
+      "date": "14/11/2020",
+      "dose": "2",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Rota Teq",
+      "date": "25/10/2020",
+      "dose": "2",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Infanrix Hexa",
+      "date": "25/10/2020",
+      "dose": "2",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Prevenar 13",
+      "date": "11/10/2020",
+      "dose": "1",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Rota Teq",
+      "date": "26/09/2020",
+      "dose": "1",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Infanrix Hexa",
+      "date": "26/09/2020",
+      "dose": "1",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "IVACTUBER-BCG",
+      "date": "20/08/2020",
+      "dose": "1",
+      "provider": "VNCDC"
+    },
+    {
+      "vaccine_name": "Viêm gan B sơ sinh",
+      "date": "27/07/2020",
+      "dose": "1",
+      "provider": "VNCDC"
+    }
+  ]
+}

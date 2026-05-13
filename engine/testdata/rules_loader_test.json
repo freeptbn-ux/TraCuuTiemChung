@@ -1,0 +1,78 @@
+{
+  "Varivax": {
+    "display_name": "Varivax (Thủy đậu)",
+    "raw_names": [
+      "Varivax",
+      "Varivax & Diluent Inj 0.5ml",
+      "Varilrix",
+      "Varicella"
+    ],
+    "is_live": true,
+    "doses_required": 2,
+    "min_interval_days": [
+      null,
+      90
+    ],
+    "min_age_months_at_first_dose": 12,
+    "type": "single_series"
+  },
+  "Prevenar13": {
+    "display_name": "Prevenar 13 (Phế cầu)",
+    "raw_names": [
+      "Prevenar 13",
+      "prevenar-13"
+    ],
+    "type": "age_dependent_series",
+    "min_age_weeks_overall": 6
+  },
+  "Six_In_One_Combined": {
+    "display_name": "Vắc xin 6 trong 1 (Hexaxim/Infanrix Hexa)",
+    "raw_names": [
+      "Infanrix Hexa",
+      "Hexaxim",
+      "DPT-VGB-HIB (SII)"
+    ],
+    "type": "single_series",
+    "doses_required": 4
+  },
+  "MMR_Group": {
+    "group_display_name": "Vắc xin Sởi-Quai bị-Rubella (MMR-II/Priorix)",
+    "type": "mmr_equivalent_group",
+    "is_live": true,
+    "raw_names_members": {
+      "MMR2": [
+        "MMR-II",
+        "MMR II & Diluent inj 0.5ml"
+      ],
+      "PRIORIX": [
+        "Priorix"
+      ]
+    }
+  },
+  "JE_Group": {
+    "group_display_name": "Vắc xin Viêm não Nhật Bản",
+    "type": "group_alternative_courses_age_range",
+    "courses": [
+      {
+        "raw_names": [
+          "Imojev"
+        ],
+        "doses_required": 2,
+        "display": "Imojev"
+      }
+    ]
+  },
+  "MeningococcalACYW_Group": {
+    "group_display_name": "Vắc xin Não mô cầu ACYW-135",
+    "type": "meningococcal_acyw_group",
+    "members": {
+      "MENQUADFI": {
+        "raw_names": [
+          "MenQuadfi",
+          "MENQUADFI"
+        ],
+        "display": "MenQuadfi"
+      }
+    }
+  }
+}
