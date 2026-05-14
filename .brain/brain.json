@@ -1,0 +1,39 @@
+{
+  "meta": { "schema_version": "1.1.0", "awf_version": "3.3.0" },
+  "project": {
+    "name": "TraCuuTiemChung",
+    "type": "Health-Tech / Mobile + Backend",
+    "status": "Active Development - Integration Phase"
+  },
+  "tech_stack": {
+    "frontend": {
+      "language": "Kotlin",
+      "framework": "Jetpack Compose",
+      "networking": "Retrofit 2"
+    },
+    "backend": {
+      "language": "Python 3.12",
+      "framework": "FastAPI",
+      "host": "Vercel"
+    },
+    "cache": "Upstash Redis"
+  },
+  "api_endpoints": [
+    { "path": "/api/lookup", "method": "POST", "description": "Tìm kiếm bệnh nhân" },
+    { "path": "/api/analyze", "method": "POST", "description": "Phân tích mũi tiêm" },
+    { "path": "/api/health", "method": "GET", "description": "Kiểm tra trạng thái hệ thống và Redis" }
+  ],
+  "knowledge_items": {
+    "patterns": [
+      "Client-Server architecture with centralized analysis engine",
+      "Sublabel-aware HTML parsing to avoid brand/disease name collision",
+      "Serverless-friendly session management using Upstash Redis",
+      "Predictive Back Gesture support for modern Android navigation"
+    ],
+    "gotchas": [
+      "VNCDC Portal uses sublabels for disease names which must be stripped for brand-matching",
+      "Vercel sub-directory deployments require 'Root Directory' setting and relative paths in vercel.json",
+      "Upstash Redis REST API is preferred for serverless to avoid connection pooling issues"
+    ]
+  }
+}

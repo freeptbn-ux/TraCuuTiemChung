@@ -1,0 +1,4 @@
+python_backup/
+.env
+*.go.test
+node_modules/
