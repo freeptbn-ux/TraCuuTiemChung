@@ -1,28 +1,29 @@
 # Changelog
 
-## [2026-05-13]
-### Added
-- **Predictive Back Gesture Support**: Kích hoạt `android:enableOnBackInvokedCallback="true"` trong Manifest để hỗ trợ cử chỉ quay lại hiện đại trên Android 13+ (Target SDK 35).
-- **Back Gesture Test Suite**: Thêm script Python `test/back_gesture_test.py` để tự động hóa việc xác minh cử chỉ quay lại và kiểm tra lỗi Logcat.
-- **Improved Navigation Stack**: Sửa lỗi điều hướng back-stack giúp ứng dụng không bị thoát đột ngột khi quay lại từ các màn hình con.
+Tất cả những thay đổi quan trọng của dự án sẽ được lưu vết tại đây.
 
-## [2026-05-12]
+## [2026-05-14] - Backend Go Migration & Cleanup
+
 ### Added
-- **Vercel Backend**: Hệ thống FastAPI hỗ trợ tra cứu và phân tích tiêm chủng từ xa.
-- **Upstash Redis Integration**: Tích hợp Redis để cache session Portal, giảm độ trễ và tránh lỗi timeout trên serverless.
-- **Production Readiness Tests**: Thêm bộ test kiểm tra điều kiện môi trường trước khi deploy.
-- **X-API-KEY Security**: Bảo mật API backend bằng header tùy chỉnh, cấu hình qua biến môi trường.
-- **Improved Parsing**: Parser thông minh hỗ trợ bóc tách nhãn phụ (sublabel) cho các loại vắc-xin (Varivax, BCG, MMR...).
-- **System Architecture**: Tài liệu kiến trúc hệ thống và hướng dẫn deploy chi tiết.
+- **Backend Go**: Khởi tạo và hoàn thiện module backend bằng Go thay thế cho Python.
+- **API Handlers**: Triển khai `api/index.go` với các endpoint `/api/lookup` và `/api/analyze`.
+- **Analyzer Engine**: Porting thành công engine phân tích quy tắc tiêm chủng từ Python sang Go.
+- **Portal Client**: Triển khai client cào dữ liệu từ Cổng thông tin Tiêm chủng Quốc gia với hỗ trợ cookie và session.
+- **Unit Tests**: Hệ thống test toàn diện cho logic analyzer, portal client và cấu hình.
+- **Vercel Config**: Cấu hình `vercel.json` và `.vercelignore` tối ưu cho Go runtime.
+- **Documentation**: Tạo file `README.md` chi tiết bằng tiếng Việt.
 
 ### Changed
-- **Vercel Config**: Chuyển sang sử dụng `Root Directory` trỏ trực tiếp vào `vercel-backend/`.
-- **API Headers**: Đổi từ `API_KEY` sang `X-API-KEY` (sử dụng Alias trong FastAPI) để tăng tính bảo mật và chuẩn hóa.
-- **README.md**: Viết lại tài liệu hướng dẫn bằng tiếng Việt chuyên nghiệp.
+- Cấu trúc thư mục: Chuyển toàn bộ logic backend vào thư mục `vercel-backend/`.
+- Cải thiện logic phân tích nhóm vaccine Phế cầu (Pneumo) và Nhật Bản B (JE).
+- Tăng cường bảo mật API bằng middleware kiểm tra `X-API-KEY`.
 
 ### Fixed
-- Lỗi Build trên Vercel do cấu hình `vercel.json` chuẩn cũ và sai đường dẫn đích (destination).
-- Lỗi timeout khi login Portal bằng cách chuyển sang mô hình Session Caching với Upstash.
+- Lỗi xung đột hàm helper trong các unit test của Go.
+- Lỗi phân tích phác đồ trộn (mixed series) trong engine.
+
+### Removed
+- **Legacy Python**: Di chuyển toàn bộ code Python cũ vào thư mục `python_backup/` để dọn dẹp không gian làm việc chính.
 
 ---
-*Lưu ý: Phiên bản này đánh dấu sự chuyển dịch sang mô hình Client-Server.*
+*Cập nhật bởi Antigravity AI.*

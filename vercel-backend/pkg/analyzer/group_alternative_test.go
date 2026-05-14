@@ -2,7 +2,7 @@ package analyzer
 
 import (
 	"testing"
-	"vercel-backend/internal/models"
+	"vercel-backend/pkg/models"
 )
 
 func TestGroupAlternativeCheckers(t *testing.T) {

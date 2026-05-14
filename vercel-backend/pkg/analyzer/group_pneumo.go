@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"vercel-backend/internal/models"
+	"vercel-backend/pkg/models"
 )
 
 // processPneumoRules xử lý logic phức hợp cho nhóm vắc xin Phế cầu (Pneumococcal).

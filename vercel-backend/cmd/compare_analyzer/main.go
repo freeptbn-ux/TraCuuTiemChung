@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"vercel-backend/internal/analyzer"
-	"vercel-backend/internal/portal"
+	"vercel-backend/pkg/analyzer"
+	"vercel-backend/pkg/portal"
 )
 
 func main() {

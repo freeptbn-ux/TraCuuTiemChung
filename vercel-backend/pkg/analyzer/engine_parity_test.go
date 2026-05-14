@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"vercel-backend/internal/models"
+	"vercel-backend/pkg/models"
 )
 
 type PythonRecommendation struct {

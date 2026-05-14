@@ -9,7 +9,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/go-resty/resty/v2"
-	"vercel-backend/internal/models"
+	"vercel-backend/pkg/models"
 )
 
 const (

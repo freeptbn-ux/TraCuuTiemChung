@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"vercel-backend/internal/models"
+	"vercel-backend/pkg/models"
 )
 
 func TestNormalizeVaccineName(t *testing.T) {

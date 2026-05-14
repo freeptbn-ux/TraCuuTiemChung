@@ -16,9 +16,9 @@ Implement basic group checkers for vaccines with multiple alternative courses (e
 - [x] Integrate these checkers into `engine.go`.
 
 ## Files to Create/Modify
-- `internal/analyzer/group_alternative.go` - New file for alternative group logic.
-- `internal/analyzer/engine.go` - Register the new checkers.
-- `internal/analyzer/group_alternative_test.go` - Tests for the group checkers.
+- `pkg/analyzer/group_alternative.go` - New file for alternative group logic.
+- `pkg/analyzer/engine.go` - Register the new checkers.
+- `pkg/analyzer/group_alternative_test.go` - Tests for the group checkers.
 
 ## Test Criteria
 - [x] **Test Rota Multiple Courses**: A 2-month-old infant with no records should receive recommendations for *both* Rotarix and Rotateq as options.

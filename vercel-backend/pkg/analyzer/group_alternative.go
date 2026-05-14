@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sort"
 
-	"vercel-backend/internal/models"
+	"vercel-backend/pkg/models"
 )
 
 // checkAlternativeCoursesMinAgeGroup xử lý nhóm vắc xin có nhiều phác đồ thay thế dựa trên độ tuổi bắt đầu (ví dụ: Rota).

@@ -15,9 +15,9 @@ Implement the overarching routing logic for Pneumococcal vaccines (Prevenar 13, 
 - [x] Run a final, comprehensive parity check against all available test data.
 
 ## Files to Create/Modify
-- `internal/analyzer/engine.go` - Add `processPneumoRules` to the `Analyze` loop.
-- `internal/analyzer/engine_pneumo_test.go` - Tests specifically for pneumo routing.
-- `internal/analyzer/engine_parity_test.go` - Expand the parity test.
+- `pkg/analyzer/engine.go` - Add `processPneumoRules` to the `Analyze` loop.
+- `pkg/analyzer/engine_pneumo_test.go` - Tests specifically for pneumo routing.
+- `pkg/analyzer/engine_parity_test.go` - Expand the parity test.
 
 ## Test Criteria
 - [x] **Test Pneumo Active Series**: A patient with 1 dose of Synflorix should NOT receive recommendations for Prevenar 13 or Vaxneuvance.

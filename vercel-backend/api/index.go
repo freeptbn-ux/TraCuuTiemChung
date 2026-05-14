@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"vercel-backend/internal/analyzer"
-	"vercel-backend/internal/config"
-	"vercel-backend/internal/portal"
+	"vercel-backend/pkg/analyzer"
+	"vercel-backend/pkg/config"
+	"vercel-backend/pkg/portal"
 )
 
 var (

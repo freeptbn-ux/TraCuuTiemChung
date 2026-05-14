@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"vercel-backend/internal/models"
+	"vercel-backend/pkg/models"
 )
 
 // checkMMREquivalentGroup xử lý nhóm vắc xin MMR và kiểm tra khoảng cách với Sởi đơn (MVVAC).

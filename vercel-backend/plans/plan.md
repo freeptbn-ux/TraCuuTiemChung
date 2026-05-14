@@ -11,7 +11,7 @@ Di cư toàn bộ hệ thống từ Python sang Golang. Tập trung vào tính m
 .
 ├── api/                # Vercel entry points (Handlers)
 │   └── index.go        # Main entry
-├── internal/           # Private business logic
+├── pkg/           # Private business logic
 │   ├── portal/         # Portal Client logic
 │   ├── analyzer/       # Vaccine rules engine
 │   ├── models/         # Shared structs

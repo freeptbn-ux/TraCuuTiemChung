@@ -7,7 +7,7 @@ import (
 	"sort"
 	"time"
 
-	"vercel-backend/internal/models"
+	"vercel-backend/pkg/models"
 )
 
 // Engine is the main vaccine analysis engine

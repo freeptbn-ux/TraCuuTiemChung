@@ -29,7 +29,7 @@ Dự án bao gồm ứng dụng Android và hệ thống backend hiệu năng ca
 - `app/`: Mã nguồn ứng dụng Android.
 - `vercel-backend/`: Mã nguồn API Backend (Go).
   - `api/`: Entry points cho Vercel.
-  - `internal/`: Logic xử lý (Analyzer, Portal Client).
+  - `pkg/`: Logic xử lý (Analyzer, Portal Client).
   - `assets/`: Chứa các quy tắc tiêm chủng (`vaccine_rules.json`).
 - `.brain/`: Lưu trữ ngữ cảnh và tri thức của dự án.
 - `docs/`: Tài liệu thiết kế và đặc tả kỹ thuật.

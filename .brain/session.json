@@ -1,41 +1,49 @@
 {
-  "updated_at": "2026-05-13T19:43:00Z",
+  "updated_at": "2026-05-14T20:07:30Z",
   "working_on": {
-    "feature": "Modern Back Gesture Support",
-    "task": "Phase 02 - Verification & Logcat Check",
+    "feature": "Vercel Backend (Go)",
+    "task": "Cleanup and GitHub Sync",
     "status": "completed",
     "files": [
-      "app/src/main/AndroidManifest.xml",
-      "test/back_gesture_test.py",
-      "plans/260513-1915-modern-back-gesture/plan.md"
-    ]
+      "api/index.go",
+      "README.md",
+      "vercel.json",
+      ".gitignore"
+    ],
+    "notes": "Backend đã chạy tốt local, đã push lên GitHub origin/main."
   },
+  "pending_tasks": [
+    {
+      "task": "Kiểm tra log trên Vercel sau khi push",
+      "priority": "high"
+    },
+    {
+      "task": "Tích hợp nốt các tính năng nâng cao vào Android app (nếu có)",
+      "priority": "medium"
+    }
+  ],
   "recent_changes": [
     {
-      "type": "feature",
-      "description": "Enabled Predictive Back Gesture by adding enableOnBackInvokedCallback to Manifest",
-      "files": ["AndroidManifest.xml"]
+      "timestamp": "2026-05-14T20:05:00Z",
+      "type": "migration",
+      "description": "Hoàn tất chuyển đổi Python sang Go",
+      "files": ["vercel-backend/**"]
     },
     {
-      "type": "test",
-      "description": "Created automated test script for back gesture verification and Logcat monitoring",
-      "files": ["test/back_gesture_test.py"]
-    },
-    {
-      "type": "fix",
-      "description": "Verified navigation flow stability between lookup, selection, and results screens",
-      "files": ["MainActivity.kt"]
+      "timestamp": "2026-05-14T20:06:00Z",
+      "type": "git",
+      "description": "Push mã nguồn lên GitHub",
+      "files": ["*"]
     }
   ],
   "decisions_made": [
     {
-      "decision": "Enable enableOnBackInvokedCallback",
-      "reason": "Required for Target SDK 35 to support system back animations and avoid Logcat warnings"
+      "decision": "Dùng Go Gin thay cho Python FastAPI",
+      "reason": "Hiệu năng cao hơn trên Vercel Go runtime."
+    },
+    {
+      "decision": "Lưu code Python cũ vào python_backup/",
+      "reason": "Để dọn dẹp repo nhưng vẫn giữ lại để tham chiếu nếu cần."
     }
-  ],
-  "next_steps": [
-    "Monitor user feedback on back gesture behavior",
-    "Consider implementing custom OnBackInvokedCallback for complex UI transitions if needed",
-    "Prepare for next phase of UI enhancements"
   ]
 }

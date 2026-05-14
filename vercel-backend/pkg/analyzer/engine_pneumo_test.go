@@ -3,7 +3,7 @@ package analyzer
 import (
 	"testing"
 
-	"vercel-backend/internal/models"
+	"vercel-backend/pkg/models"
 )
 
 func TestEngine_PneumoRules(t *testing.T) {

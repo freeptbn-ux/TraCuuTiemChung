@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"vercel-backend/internal/config"
+	"vercel-backend/pkg/config"
 )
 
 func TestAuthRequired(t *testing.T) {

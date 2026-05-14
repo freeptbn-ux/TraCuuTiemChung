@@ -20,9 +20,9 @@ Implement specialized group checkers for vaccines with unique interaction rules 
 - [x] Integrate these checkers into `engine.go`.
 
 ## Files to Create/Modify
-- `internal/analyzer/group_special.go` - New file for specialized group logic.
-- `internal/analyzer/engine.go` - Register the new checkers.
-- `internal/analyzer/group_special_test.go` - Tests for the specialized checkers.
+- `pkg/analyzer/group_special.go` - New file for specialized group logic.
+- `pkg/analyzer/engine.go` - Register the new checkers.
+- `pkg/analyzer/group_special_test.go` - Tests for the specialized checkers.
 
 ## Test Criteria
 - [x] **Test MMR Interval**: A patient with MVVAC taken on Jan 1st should see MMR marked as `info/scheduled` until Mar 26th (84 days later).

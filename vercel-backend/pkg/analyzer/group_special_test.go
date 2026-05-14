@@ -3,7 +3,7 @@ package analyzer
 import (
 	"strings"
 	"testing"
-	"vercel-backend/internal/models"
+	"vercel-backend/pkg/models"
 )
 
 func TestGroupSpecialCheckers(t *testing.T) {
