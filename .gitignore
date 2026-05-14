@@ -54,3 +54,6 @@ go.work
 
 # Legacy Python backup
 vercel-backend/python_backup/
+
+# Python scripts (prevent Vercel from detecting Python runtime)
+*.py
