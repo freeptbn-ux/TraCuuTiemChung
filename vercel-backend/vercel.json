@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "//": "Triggering new build",
   "functions": {
     "api/*.go": {
       "runtime": "vercel-golang@latest"
