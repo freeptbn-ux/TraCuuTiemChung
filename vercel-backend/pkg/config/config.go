@@ -1,7 +1,9 @@
 package config
 
 import (
+	"fmt"
 	"os"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -19,8 +21,19 @@ type Config struct {
 }
 
 func LoadConfig() *Config {
-	// Load .env if exists
 	_ = godotenv.Load()
+	redisURL := getEnv("REDIS_URL", getEnv("UPSTASH_REDIS_URL", ""))
+	
+	// Tự động lắp ghép URL từ biến Upstash REST nếu thiếu REDIS_URL
+	if redisURL == "" {
+		restURL := getEnv("UPSTASH_REDIS_REST_URL", "")
+		restToken := getEnv("UPSTASH_REDIS_REST_TOKEN", "")
+		if restURL != "" && restToken != "" {
+			// restURL thường có dạng: https://host
+			host := strings.TrimPrefix(restURL, "https://")
+			redisURL = fmt.Sprintf("rediss://default:%s@%s:6379", restToken, host)
+		}
+	}
 
 	return &Config{
 		X_API_KEY:       getEnv("X_API_KEY", ""),
@@ -28,7 +41,7 @@ func LoadConfig() *Config {
 		PORTAL_USERNAME: getEnv("PORTAL_USERNAME", ""),
 		PORTAL_PASSWORD: getEnv("PORTAL_PASSWORD", ""),
 		Redis: RedisConfig{
-			URL: getEnv("REDIS_URL", getEnv("UPSTASH_REDIS_URL", "")),
+			URL: redisURL,
 		},
 	}
 }
