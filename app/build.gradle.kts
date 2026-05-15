@@ -48,7 +48,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://tracuutiemchung.vercel.app/\"") // Point to production for real device test
+            buildConfigField("String", "BASE_URL", "\"https://tracuutiemchung.vercel.app/\"")
             isMinifyEnabled = false
         }
         release {

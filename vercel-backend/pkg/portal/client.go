@@ -196,6 +196,15 @@ func (pc *PortalClient) performLogin() error {
 
 // LookupPatients searches for patients by phone number
 func (pc *PortalClient) LookupPatients(phone string) ([]models.Patient, error) {
+	// Always login first — on Vercel stateless serverless, there is no persistent
+	// session between invocations. Relying on session detection is unreliable.
+	if !pc.IsLoggedIn() {
+		slog.Info("No active session, logging in before lookup", "phone", phone)
+		if err := pc.Login(); err != nil {
+			return nil, fmt.Errorf("login failed before lookup: %w", err)
+		}
+	}
+
 	searchParams := map[string]string{
 		"Length":            "5",
 		"LoaiDiaChi":        "0",
@@ -230,11 +239,11 @@ func (pc *PortalClient) LookupPatients(phone string) ([]models.Patient, error) {
 	}
 
 	htmlContent := resp.String()
-	// Detect session expiry (usually redirects to Login or shows Login form in AJAX response)
+	// Detect session expiry (server returned login page instead of data)
 	if strings.Contains(htmlContent, "UserName") && strings.Contains(htmlContent, "__RequestVerificationToken") {
-		// Session expired, retry login
+		slog.Warn("Session expired mid-request, re-logging in", "phone", phone)
 		if err := pc.Login(); err != nil {
-			return nil, err
+			return nil, fmt.Errorf("re-login failed: %w", err)
 		}
 		resp, err = pc.restClient.R().
 			SetQueryParams(searchParams).
@@ -317,6 +326,14 @@ func (pc *PortalClient) ParseSearchResults(htmlContent string) ([]models.Patient
 
 // GetVaccinationHistory retrieves history for a specific patient
 func (pc *PortalClient) GetVaccinationHistory(patientID string) (*models.PatientDetail, error) {
+	// Always login first — on Vercel stateless serverless, there is no persistent session.
+	if !pc.IsLoggedIn() {
+		slog.Info("No active session, logging in before GetVaccinationHistory", "patientID", patientID)
+		if err := pc.Login(); err != nil {
+			return nil, fmt.Errorf("login failed before history fetch: %w", err)
+		}
+	}
+
 	resp, err := pc.restClient.R().
 		SetQueryParam("doiTuongId", patientID).
 		SetHeader("X-Requested-With", "XMLHttpRequest").
@@ -329,8 +346,9 @@ func (pc *PortalClient) GetVaccinationHistory(patientID string) (*models.Patient
 
 	htmlContent := resp.String()
 	if strings.Contains(htmlContent, "UserName") && strings.Contains(htmlContent, "__RequestVerificationToken") {
+		slog.Warn("Session expired mid-request, re-logging in", "patientID", patientID)
 		if err := pc.Login(); err != nil {
-			return nil, err
+			return nil, fmt.Errorf("re-login failed: %w", err)
 		}
 		resp, err = pc.restClient.R().
 			SetQueryParam("doiTuongId", patientID).

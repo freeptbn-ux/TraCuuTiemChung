@@ -1,44 +1,149 @@
-# TraCuuTiemChung (Tra Cứu Tiêm Chủng)
+# 💉 Tra Cứu Tiêm Chủng
 
-Dự án cung cấp một hệ thống phân tích và tra cứu lịch tiêm chủng thông minh. Dựa trên dữ liệu tiêm chủng của bệnh nhân (như từ VNVC), hệ thống có khả năng phân tích phác đồ, tính toán mũi tiêm tiếp theo, cảnh báo khoảng cách, giới hạn độ tuổi, và kiểm tra các tương tác giữa các loại vắc xin với độ chính xác cao.
+Ứng dụng Android giúp tra cứu lịch sử tiêm chủng và nhận khuyến nghị vaccine cá nhân hóa, tích hợp với cổng thông tin VNCDC.
 
-## 🚀 Công nghệ sử dụng
-- **Golang**: Xây dựng Engine phân tích lịch tiêm chủng hiệu năng cao (`vercel-backend`). Đóng vai trò là backend chính triển khai dưới dạng serverless.
-- **Android (Kotlin)**: Ứng dụng di động giúp người dùng tiện lợi tra cứu và nhận thông báo về lịch tiêm chủng.
-- **Python**: Các script hỗ trợ kiểm thử tính chính xác (parity test) so với hệ thống cũ và xử lý dữ liệu.
-- **Vercel**: Nền tảng Serverless để triển khai Golang Backend một cách tự động và linh hoạt.
-- **Redis**: Quản lý phiên đăng nhập (session persistence) và Rate Limit để bảo vệ API.
+---
 
-## 📂 Cấu trúc thư mục
-- `/vercel-backend`: Mã nguồn chính của hệ thống backend viết bằng Go, sẵn sàng deploy lên Vercel. Chứa engine phân tích (`pkg/analyzer`).
-- `/app`: Mã nguồn ứng dụng Android viết bằng Kotlin.
-- `/tests`: Chứa các script Python để crawl dữ liệu giả lập và sinh golden files cho unit testing.
-- `/docs` và `/plans`: Tài liệu thiết kế hệ thống và theo dõi quá trình phát triển (với AWF).
-- `/.brain`: Thư mục chứa cấu hình trí tuệ nhân tạo AWF của dự án (luôn được đồng bộ).
+## 🏗️ Kiến trúc hệ thống
 
-## 🛠 Hướng dẫn cài đặt và chạy thử (Backend)
-1. **Yêu cầu hệ thống**:
-   - Golang 1.20+
-   - Redis (nếu chạy local hoàn chỉnh với tính năng portal)
+```
+┌─────────────────────┐        ┌──────────────────────┐        ┌─────────────────┐
+│   Android App       │ ──────▶│  Vercel Backend (Go) │ ──────▶│  Cổng VNCDC    │
+│   (Kotlin/Compose)  │ JSON   │  tracuutiemchung      │  HTTP  │  tiemchung.     │
+│                     │◀────── │  .vercel.app          │◀────── │  vncdc.gov.vn   │
+└─────────────────────┘        └──────────────────────┘        └─────────────────┘
+```
 
-2. **Cài đặt dependencies**:
-   ```bash
-   cd vercel-backend
-   go mod download
-   ```
+### Thành phần chính
 
-3. **Chạy các Unit Tests (Bao gồm Parity Tests)**:
-   ```bash
-   cd vercel-backend
-   go test ./... -v
-   ```
+| Thư mục | Mô tả |
+|---|---|
+| `app/` | Ứng dụng Android (Kotlin + Jetpack Compose) |
+| `vercel-backend/` | Backend Go chạy trên Vercel Serverless |
+| `engine/` | Engine phân tích lịch tiêm chủng (Go) |
 
-4. **Chạy server local**:
-   ```bash
-   cd vercel-backend
-   go run api/index.go
-   ```
+---
 
-## 📝 Bản quyền
-Copyright 2026 Nguyễn Duy Trường.
-Mọi quyền được bảo lưu.
+## 📱 Ứng dụng Android
+
+### Tính năng
+- Tra cứu bệnh nhân theo số điện thoại
+- Hiển thị lịch sử các mũi tiêm đã thực hiện
+- Phân tích và đề xuất các vaccine còn thiếu
+- Cảnh báo tương tác giữa các loại vaccine
+
+### Yêu cầu
+- Android 8.0 (API 26) trở lên
+- Kết nối Internet
+
+### Cấu hình (`local.properties`)
+
+```properties
+sdk.dir=C:\Users\...\AppData\Local\Android\Sdk
+X_API_KEY=your_api_key_here
+```
+
+### Build & Chạy
+
+```bash
+# Build debug APK
+./gradlew assembleDebug
+
+# Cài lên thiết bị
+adb install app/build/outputs/apk/debug/app-debug.apk
+```
+
+---
+
+## ⚙️ Backend Vercel
+
+Backend viết bằng Go, chạy dưới dạng Serverless Function trên Vercel. Mỗi request tự đăng nhập vào cổng VNCDC, scrape dữ liệu và phân tích.
+
+### API Endpoints
+
+| Method | Endpoint | Mô tả |
+|---|---|---|
+| `GET` | `/api/health` | Kiểm tra trạng thái |
+| `POST` | `/api/lookup` | Tìm bệnh nhân theo SĐT |
+| `POST` | `/api/analyze` | Phân tích lịch tiêm của bệnh nhân |
+
+### Xác thực
+
+Tất cả request tới `/api/lookup` và `/api/analyze` phải có header:
+
+```
+X-API-KEY: <your_key>
+```
+
+### Biến môi trường (Vercel)
+
+| Tên | Mô tả |
+|---|---|
+| `X_API_KEY` | Khóa bảo mật cho mobile app |
+| `PORTAL_USERNAME` | Tên đăng nhập cổng VNCDC |
+| `PORTAL_PASSWORD` | Mật khẩu cổng VNCDC |
+| `UPSTASH_REDIS_REST_URL` | URL Redis (Upstash) để cache session |
+| `UPSTASH_REDIS_REST_TOKEN` | Token Redis (Upstash) |
+
+### Chạy local
+
+```bash
+cd vercel-backend
+cp .env.example .env
+# Điền thông tin vào .env
+
+go run cmd/server/main.go
+```
+
+### Chạy test
+
+```bash
+cd vercel-backend
+
+# Unit tests
+go test ./...
+
+# Integration test với dữ liệu thật (cần .env)
+go test ./api/ -run TestLiveVNVC -v -timeout 120s
+```
+
+### Deploy
+
+Push code lên nhánh `main` → Vercel tự động deploy.
+
+```bash
+git push origin main
+```
+
+---
+
+## 🔬 Engine Phân Tích
+
+Engine phân tích vaccine nằm tại `vercel-backend/pkg/analyzer/`, được thiết kế để:
+
+- Áp dụng các quy tắc tiêm chủng từ file `assets/vaccine_rules.json`
+- Tính toán khoảng cách tối thiểu giữa các mũi tiêm
+- Phát hiện tương tác giữa các loại vaccine (VD: MMR và vaccine sống)
+- Hỗ trợ nhiều loại quy tắc: chuỗi liều, phụ thuộc tuổi, nhóm đặc biệt
+
+---
+
+## 🔐 Bảo mật
+
+- `local.properties` và `.env` **không được commit** lên Git
+- API key được mã hóa trong `BuildConfig` (không hard-code trong source)
+- Backend sử dụng Redis lock để tránh race condition khi nhiều request đăng nhập đồng thời
+
+---
+
+## 📝 Ghi chú phát triển
+
+- Backend là **stateless serverless** — mỗi invocation phải tự đăng nhập lại
+- Redis (Upstash) được dùng để cache cookie session và distributed lock
+- Engine phân tích đã được kiểm tra parity với implementation Python legacy
+
+---
+
+## 📄 License
+
+Dự án nội bộ. Không dùng cho mục đích thương mại.
