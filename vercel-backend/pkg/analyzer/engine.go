@@ -29,11 +29,27 @@ func NewEngine(rulesPath string, dob, analysisDate time.Time) (*Engine, error) {
 	}, nil
 }
 
+func NewEngineFromBytes(data []byte, dob, analysisDate time.Time) (*Engine, error) {
+	rules, err := LoadRulesFromBytes(data)
+	if err != nil {
+		return nil, err
+	}
+	return &Engine{
+		Rules:        rules,
+		DOB:          dob,
+		AnalysisDate: analysisDate,
+	}, nil
+}
+
 func LoadRules(path string) (map[string]VaccineRule, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
+	return LoadRulesFromBytes(data)
+}
+
+func LoadRulesFromBytes(data []byte) (map[string]VaccineRule, error) {
 	var rules map[string]VaccineRule
 	if err := json.Unmarshal(data, &rules); err != nil {
 		return nil, err

@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"vercel-backend/assets"
 	"vercel-backend/pkg/analyzer"
 	"vercel-backend/pkg/config"
 	"vercel-backend/pkg/logger"
@@ -182,13 +182,8 @@ func handleAnalyze(c *gin.Context) {
 		}
 	}
 
-	// 3. Initialize engine and analyze
-	rulesPath := filepath.Join("assets", "vaccine_rules.json")
-	if _, err := os.Stat(rulesPath); os.IsNotExist(err) {
-		rulesPath = "../assets/vaccine_rules.json"
-	}
-
-	engine, err := analyzer.NewEngine(rulesPath, dob, analysisDate)
+	// 3. Initialize engine and analyze using embedded rules
+	engine, err := analyzer.NewEngineFromBytes(assets.VaccineRulesJSON, dob, analysisDate)
 	if err != nil {
 		c.Error(fmt.Errorf("failed to initialize analyzer: %w", err))
 		return
