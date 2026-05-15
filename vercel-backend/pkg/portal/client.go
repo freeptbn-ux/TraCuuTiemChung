@@ -184,7 +184,7 @@ func (pc *PortalClient) ParseSearchResults(htmlContent string) ([]models.Patient
 		patientCodes[i] = match[1]
 	}
 
-	var results []models.Patient
+	results := []models.Patient{}
 	doc.Find("table#doiTuongSearchResult tbody tr").Each(func(i int, s *goquery.Selection) {
 		if strings.Contains(strings.ToLower(s.Text()), "không có đối tượng nào") {
 			return

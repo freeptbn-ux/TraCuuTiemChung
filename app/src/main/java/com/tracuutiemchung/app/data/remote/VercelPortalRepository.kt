@@ -17,7 +17,8 @@ class VercelPortalRepository(
             if (response.isSuccessful) {
                 val body = response.body()
                 if (body?.status == "success") {
-                    Result.success(body.data.map { dto ->
+                    val patients = body.data ?: emptyList()
+                    Result.success(patients.map { dto ->
                         PortalPatientSummary(
                             patientId = dto.id,
                             fullName = dto.name,

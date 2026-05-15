@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class VercelResponse<T>(
     val status: String,
-    val data: T,
+    val data: T? = null,
     val detail: String? = null
 )
 
