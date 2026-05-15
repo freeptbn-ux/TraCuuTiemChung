@@ -28,7 +28,7 @@ func LoadConfig() *Config {
 		PORTAL_USERNAME: getEnv("PORTAL_USERNAME", ""),
 		PORTAL_PASSWORD: getEnv("PORTAL_PASSWORD", ""),
 		Redis: RedisConfig{
-			URL: getEnv("REDIS_URL", ""),
+			URL: getEnv("REDIS_URL", getEnv("UPSTASH_REDIS_URL", "")),
 		},
 	}
 }
