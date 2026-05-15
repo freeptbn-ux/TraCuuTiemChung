@@ -14,7 +14,7 @@ import (
 	"vercel-backend/pkg/logger"
 	"vercel-backend/pkg/portal"
 	"log/slog"
-	"vercel-backend/api/middleware"
+	"vercel-backend/pkg/middleware"
 
 	"github.com/redis/go-redis/v9"
 )
