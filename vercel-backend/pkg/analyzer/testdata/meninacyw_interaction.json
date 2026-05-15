@@ -1,0 +1,19 @@
+{
+  "patient_info": {
+    "name": "MenACYW Interaction",
+    "birth": "01/01/2020",
+    "system_date": "15/05/2026"
+  },
+  "history": [
+    {
+      "vaccine_name": "VA-Mengoc-BC",
+      "dose": "1",
+      "date": "01/01/2022"
+    },
+    {
+      "vaccine_name": "MenQuadfi",
+      "dose": "1",
+      "date": "01/02/2022"
+    }
+  ]
+}

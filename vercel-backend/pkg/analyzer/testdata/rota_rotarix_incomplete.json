@@ -1,0 +1,14 @@
+{
+  "patient_info": {
+    "name": "Rota Rotarix 1",
+    "birth": "01/01/2024",
+    "system_date": "15/05/2026"
+  },
+  "history": [
+    {
+      "vaccine_name": "Rotarix",
+      "dose": "1",
+      "date": "01/03/2024"
+    }
+  ]
+}

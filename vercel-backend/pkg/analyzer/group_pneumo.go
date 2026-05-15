@@ -12,7 +12,7 @@ import (
 func (e *Engine) processPneumoRules(administeredMap map[string][]models.VaccineRecord) []AnalysisResult {
 	var results []AnalysisResult
 
-	// 1. Thu thập bản ghi của từng loại
+	// 1. Thu thập bản ghi
 	prevenarRule := e.Rules["Prevenar13"]
 	vaxneuvanceRule := e.Rules["Vaxneuvance"]
 	synflorixRule := e.Rules["Synflorix"]
@@ -23,90 +23,105 @@ func (e *Engine) processPneumoRules(administeredMap map[string][]models.VaccineR
 	synflorixRecs := e.getMatchingRecords(synflorixRule.NamesNorm, administeredMap)
 	pneumovaxRecs := e.getMatchingRecords(pneumovaxRule.NamesNorm, administeredMap)
 
+	hasPneumovax := len(pneumovaxRecs) > 0
+
 	// 2. Kiểm tra việc tiêm lẫn (Mixed series)
-	var activeSeries []string
+	activeSeriesKeys := []string{}
+	activeSeriesNames := []string{}
 	if len(prevenarRecs) > 0 {
-		activeSeries = append(activeSeries, "Prevenar 13")
+		activeSeriesKeys = append(activeSeriesKeys, "Prevenar13")
+		activeSeriesNames = append(activeSeriesNames, prevenarRule.DisplayName)
 	}
 	if len(vaxneuvanceRecs) > 0 {
-		activeSeries = append(activeSeries, "Vaxneuvance")
+		activeSeriesKeys = append(activeSeriesKeys, "Vaxneuvance")
+		activeSeriesNames = append(activeSeriesNames, vaxneuvanceRule.DisplayName)
 	}
 	if len(synflorixRecs) > 0 {
-		activeSeries = append(activeSeries, "Synflorix")
+		activeSeriesKeys = append(activeSeriesKeys, "Synflorix")
+		activeSeriesNames = append(activeSeriesNames, synflorixRule.DisplayName)
 	}
 
-	if len(activeSeries) > 1 {
+	if len(activeSeriesKeys) > 1 {
+		mixedNames := []string{}
+		for _, k := range activeSeriesKeys {
+			mixedNames = append(mixedNames, e.Rules[k].DisplayName)
+		}
 		results = append(results, AnalysisResult{
-			VaccineNameForPopup: "Phế cầu (Mixed)",
-			Description:         fmt.Sprintf("Cảnh báo: Tiêm lẫn các loại phế cầu (%s). Nên tiêm cùng một loại để đạt hiệu quả tốt nhất.", strings.Join(activeSeries, " + ")),
-			StatusTags:          []string{"error_interchange"},
+			VaccineNameForPopup: "Phế cầu (nhiều loại)",
+			Description:         fmt.Sprintf("Cảnh báo: Đã ghi nhận tiêm xen kẽ các loại phế cầu (%s). Không nên sử dụng xen kẽ.", strings.Join(mixedNames, " và ")),
+			StatusTags:          []string{"error_interchange", "pneumo_mixed"},
 		})
+		return results
 	}
 
-	// 3. Quyết định phác đồ nào để recommend
-	// Ưu tiên: Nếu đã bắt đầu loại nào thì tiếp tục loại đó.
-	// Nếu chưa bắt đầu, hoặc đã bắt đầu nhưng yêu cầu parity là không hiện cái khác.
-	
-	hasSynflorix := len(synflorixRecs) > 0
-	hasPrevenar := len(prevenarRecs) > 0
-	hasVaxneuvance := len(vaxneuvanceRecs) > 0
-	
-	pcvCompleted := false
+	// 3. Skip logic: Nếu đã tiêm Pneumovax23 thì skip tất cả PCV
+	if hasPneumovax {
+		return results
+	}
 
-	if hasSynflorix {
-		res := e.checkAgeDependentSeries("Synflorix", synflorixRule, administeredMap)
-		if res != nil {
-			results = append(results, *res)
-		} else {
-			pcvCompleted = true
-		}
-	} else if hasPrevenar {
-		res := e.checkAgeDependentSeries("Prevenar13", prevenarRule, administeredMap)
-		if res != nil {
-			results = append(results, *res)
-		} else {
-			pcvCompleted = true
-		}
-	} else if hasVaxneuvance {
-		res := e.checkAgeDependentSeries("Vaxneuvance", vaxneuvanceRule, administeredMap)
-		if res != nil {
-			results = append(results, *res)
-		} else {
-			pcvCompleted = true
-		}
+	// 4. Quyết định phác đồ PCV nào để recommend
+	_, _, patientAgeYears := GetAgeAtDate(e.DOB, e.AnalysisDate)
+	
+	// Determine which PCV to show
+	var pcvToProcess []string
+	if len(activeSeriesKeys) > 0 {
+		// Nếu đã tiêm, chỉ hiện loại đang tiêm (hoặc loại đầu tiên nếu mixed)
+		pcvToProcess = []string{activeSeriesKeys[0]}
 	} else {
-		// Chưa tiêm loại nào, hiện cả 3 lựa chọn PCV
-		resP := e.checkAgeDependentSeries("Prevenar13", prevenarRule, administeredMap)
-		if resP != nil {
-			results = append(results, *resP)
-		}
-		resV := e.checkAgeDependentSeries("Vaxneuvance", vaxneuvanceRule, administeredMap)
-		if resV != nil {
-			results = append(results, *resV)
-		}
-		resS := e.checkAgeDependentSeries("Synflorix", synflorixRule, administeredMap)
-		if resS != nil {
-			results = append(results, *resS)
-		}
+		// Chưa tiêm loại nào, hiện cả 3
+		pcvToProcess = []string{"Prevenar13", "Vaxneuvance", "Synflorix"}
 	}
 
-	monthsNow, _, _ := GetAgeAtDate(e.DOB, e.AnalysisDate)
-
-	// 4. Logic cho Pneumovax 23 (Phế cầu 23)
-	if len(pneumovaxRecs) == 0 {
-		resPv := e.checkSingleSeries("Pneumovax23", pneumovaxRule, administeredMap)
-		if resPv != nil {
-			if monthsNow >= 24 {
-				if !pcvCompleted {
-					resPv.Description = fmt.Sprintf("%s (Có thể tiêm bổ sung hoặc thay thế để mở rộng bảo vệ)", resPv.VaccineNameForPopup)
-				} else {
-					resPv.Description = fmt.Sprintf("%s (Tiêm mũi nhắc mở rộng bảo vệ)", resPv.VaccineNameForPopup)
+	for _, pKey := range pcvToProcess {
+		pRule := e.Rules[pKey]
+		resList := e.checkAgeDependentSeries(pKey, pRule, administeredMap)
+		
+		if patientAgeYears >= 2 && len(activeSeriesKeys) > 0 {
+			// Logic đặc biệt cho trẻ trên 2 tuổi ĐÃ TIÊM PCV
+			// Count ALL PCV doses (Synflorix + Prevenar 13 + Vaxneuvance)
+			allPcvNames := []string{"synflorix", "prevenar13", "vaxneuvance", "prevenar 13"}
+			pcvCount := len(e.getMatchingRecords(allPcvNames, administeredMap))
+			
+			if pcvCount < 3 {
+				results = append(results, AnalysisResult{
+					VaccineNameForPopup: pneumovaxRule.DisplayName,
+					Description:         fmt.Sprintf("%s: Có thể tiêm 1 mũi để hoàn thành phác đồ phế cầu (do đã trên 2 tuổi và đã tiêm < 3 mũi %s).", pneumovaxRule.DisplayName, pRule.DisplayName),
+					EarliestNextDoseDate: &e.AnalysisDate,
+					StatusTags:          []string{"info", "alternative_completion"},
+				})
+				return results // Skip others like in Python
+			} else if pcvCount == 3 {
+				if len(resList) > 0 {
+					results = append(results, AnalysisResult{
+						VaccineNameForPopup: pneumovaxRule.DisplayName,
+						Description:         fmt.Sprintf("%s: Có thể tiêm 1 mũi thay thế cho mũi 4 của %s (do đã trên 2 tuổi).", pneumovaxRule.DisplayName, pRule.DisplayName),
+						EarliestNextDoseDate: &e.AnalysisDate,
+						StatusTags:          []string{"info", "alternative_booster"},
+					})
+					// In Python, it skips the PCV recommendation if Pneumovax is suggested as alternative booster
+					continue 
 				}
-			} else {
-				// Vẫn hiện nhưng là too_young (theo parity)
-				resPv.StatusTags = []string{"too_young"}
 			}
-			results = append(results, *resPv)
+		}
+		results = append(results, resList...)
+	}
+
+	// 5. Logic cho Pneumovax 23 (nếu chưa tiêm và chưa được xử lý ở trên)
+	if !hasPneumovax {
+		// Check if already suggested as alternative
+		alreadySuggested := false
+		for _, r := range results {
+			// Robust matching for already suggested Pneumovax 23
+			normR := NormalizeForMatch(r.VaccineNameForPopup)
+			if strings.Contains(normR, "pneumovax23") || strings.Contains(normR, "pneumo23") {
+				alreadySuggested = true
+				break
+			}
+		}
+
+		if !alreadySuggested {
+			resPvList := e.checkSingleSeries("Pneumovax23", pneumovaxRule, administeredMap)
+			results = append(results, resPvList...)
 		}
 	}
 

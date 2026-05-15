@@ -1,0 +1,156 @@
+[
+  {
+    "vaccine_name_for_popup": "Vắc xin Sởi-Quai bị-Rubella (MMR-II/Priorix)",
+    "description": "Vắc xin Sởi-Quai bị-Rubella (MMR-II/Priorix) (Chưa tiêm - cần 3 liều theo phác đồ). đủ điều kiện tuổi.",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Varivax (Thủy đậu)",
+    "description": "Varivax (Thủy đậu) (Chưa tiêm - cần 2 liều). đủ điều kiện tuổi",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "MenQuadfi (Sanofi Pasteur)",
+    "description": "MenQuadfi (Sanofi Pasteur) (Gợi ý 1 mũi duy nhất).",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "due"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Menactra (Sanofi Pasteur)",
+    "description": "Menactra (Sanofi Pasteur) (Hoặc lựa chọn thay thế cho MenQuadfi).",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "due"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Vắc xin Viêm não Nhật Bản (Imojev/JEEV/Jevax)",
+    "description": "Vắc xin Viêm não Nhật Bản (Imojev/JEEV/Jevax) - Cảnh báo: Đã tiêm VNNB (Jevax) sau đó chuyển sang Imojev. Sẽ ưu tiên nhắc lịch theo phác đồ Imojev.",
+    "earliest_next_dose_date": null,
+    "status_tags": [
+      "info",
+      "je_mixed_warning",
+      "switched_to_imojev"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Vắc xin Viêm não Nhật Bản (Imojev/JEEV/Jevax) - Imojev (Sanofi Pasteur)",
+    "description": "Vắc xin Viêm não Nhật Bản (Imojev/JEEV/Jevax) - Imojev (Sanofi Pasteur) - Cần thêm 1 liều. Mũi 2 cách mũi 1 tối thiểu 12 tháng.",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "due"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "VA - MENGOC - BC (Não mô cầu BC)",
+    "description": "VA - MENGOC - BC (Não mô cầu BC) (Chưa tiêm - cần 2 liều). đủ điều kiện tuổi",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "MVVAC (Sởi đơn)",
+    "description": "MVVAC (Sởi đơn) (Chưa tiêm - cần 1 liều). đủ điều kiện tuổi",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Typhim Vi (Thương hàn)",
+    "description": "Typhim Vi (Thương hàn) (Chưa tiêm - cần 1 liều). đủ điều kiện tuổi",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Morcvax (Tả)",
+    "description": "Morcvax (Tả) (Chưa tiêm - cần 2 liều). đủ điều kiện tuổi",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Vắc xin 6 trong 1 (Hexaxim/Infanrix Hexa)",
+    "description": "Vắc xin 6 trong 1 (Hexaxim/Infanrix Hexa) (Chưa tiêm - cần 4 liều). đủ điều kiện tuổi",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Vắc xin Rota",
+    "description": "Vắc xin Rota: Đã qua 6 tháng tuổi, không còn chỉ định bắt đầu.",
+    "earliest_next_dose_date": null,
+    "status_tags": [
+      "too_old_to_start"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Prevenar 13 (Phế cầu)",
+    "description": "Prevenar 13 (Phế cầu) (Chưa tiêm - cần 4 liều theo phác đồ). đủ điều kiện tuổi.",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Vaxneuvance (Phế cầu)",
+    "description": "Vaxneuvance (Phế cầu) (Chưa tiêm - cần 4 liều theo phác đồ). đủ điều kiện tuổi.",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Synflorix (Phế cầu)",
+    "description": "Synflorix (Phế cầu) (Chưa tiêm - cần 4 liều theo phác đồ). đủ điều kiện tuổi.",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Pneumovax 23 / PNEUMO 23 (Phế cầu)",
+    "description": "Pneumovax 23 / PNEUMO 23 (Phế cầu) (Chưa tiêm - cần 1 liều). đủ điều kiện tuổi",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Viêm Gan A",
+    "description": "Viêm Gan A: Chưa tiêm. Lựa chọn có thể tiêm: Avaxim 80U (Pháp) / Twinrix, HAVAX (Việt Nam).",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "due"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Vắc xin Cúm",
+    "description": "Vắc xin Cúm (Chưa tiêm. Lần đầu (nếu <9 tuổi) có thể cần 2 mũi cách nhau ~1 tháng, sau đó nhắc lại hàng năm). đủ điều kiện tuổi.",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Lao (BCG)",
+    "description": "Lao (BCG) (Chưa tiêm - cần 1 liều). đủ điều kiện tuổi",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  }
+]

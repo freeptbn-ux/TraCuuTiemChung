@@ -1,0 +1,24 @@
+{
+  "patient_info": {
+    "name": "JE Jevax 3",
+    "birth": "01/01/2020",
+    "system_date": "15/05/2026"
+  },
+  "history": [
+    {
+      "vaccine_name": "Jevax",
+      "dose": "1",
+      "date": "01/01/2021"
+    },
+    {
+      "vaccine_name": "Jevax",
+      "dose": "2",
+      "date": "15/01/2021"
+    },
+    {
+      "vaccine_name": "Jevax",
+      "dose": "3",
+      "date": "15/01/2022"
+    }
+  ]
+}

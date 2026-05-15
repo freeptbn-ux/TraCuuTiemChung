@@ -1,0 +1,69 @@
+{
+  "patient_info": {
+    "name": "Phạm Thanh Thảo",
+    "birth": "10/09/2021",
+    "system_date": "15/05/2026"
+  },
+  "history": [
+    {
+      "vaccine_name": "Hexaxim",
+      "dose": "4",
+      "date": "23/04/2023"
+    },
+    {
+      "vaccine_name": "MMR-II",
+      "dose": "1",
+      "date": "04/04/2023"
+    },
+    {
+      "vaccine_name": "GC FLU Pre-filled Syringe",
+      "dose": "1",
+      "date": "16/12/2022"
+    },
+    {
+      "vaccine_name": "Imojev",
+      "dose": "2",
+      "date": "16/12/2022"
+    },
+    {
+      "vaccine_name": "VA - MENGOC - BC",
+      "dose": "2",
+      "date": "25/09/2022"
+    },
+    {
+      "vaccine_name": "GC FLU Quadrivalent pre-filled syringe inj",
+      "dose": "1",
+      "date": "25/09/2022"
+    },
+    {
+      "vaccine_name": "MVVAC",
+      "dose": "1",
+      "date": "19/06/2022"
+    },
+    {
+      "vaccine_name": "VA - MENGOC - BC",
+      "dose": "1",
+      "date": "19/06/2022"
+    },
+    {
+      "vaccine_name": "Hexaxim",
+      "dose": "3",
+      "date": "10/01/2022"
+    },
+    {
+      "vaccine_name": "Hexaxim",
+      "dose": "2",
+      "date": "10/12/2021"
+    },
+    {
+      "vaccine_name": "Hexaxim",
+      "dose": "1",
+      "date": "10/11/2021"
+    },
+    {
+      "vaccine_name": "IVACTUBER-BCG",
+      "dose": "1",
+      "date": "27/09/2021"
+    }
+  ]
+}

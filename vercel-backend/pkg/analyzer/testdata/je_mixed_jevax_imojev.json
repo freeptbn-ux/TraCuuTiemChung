@@ -1,0 +1,19 @@
+{
+  "patient_info": {
+    "name": "JE Mixed",
+    "birth": "01/01/2020",
+    "system_date": "15/05/2026"
+  },
+  "history": [
+    {
+      "vaccine_name": "Jevax",
+      "dose": "1",
+      "date": "01/01/2021"
+    },
+    {
+      "vaccine_name": "Imojev",
+      "dose": "1",
+      "date": "01/01/2022"
+    }
+  ]
+}

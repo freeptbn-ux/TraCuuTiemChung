@@ -1,0 +1,35 @@
+[
+  {
+    "vaccine_name_for_popup": "Morcvax (Tả)",
+    "description": "Morcvax (Tả) (Chưa tiêm - cần 2 liều). đủ điều kiện tuổi",
+    "earliest_next_dose_date": "2026-05-12",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Typhim Vi (Thương hàn)",
+    "description": "Typhim Vi (Thương hàn) (Chưa tiêm - cần 1 liều). đủ điều kiện tuổi",
+    "earliest_next_dose_date": "2026-05-12",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Viêm Gan A",
+    "description": "Viêm Gan A: Chưa tiêm. Lựa chọn có thể tiêm: Avaxim 80U (Pháp) / Twinrix, HAVAX (Việt Nam).",
+    "earliest_next_dose_date": "2026-05-12",
+    "status_tags": [
+      "due"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Vắc xin Cúm",
+    "description": "Vắc xin Cúm - Lịch tiêm nhắc lại hàng năm tiếp theo.",
+    "earliest_next_dose_date": "2026-11-16",
+    "status_tags": [
+      "info",
+      "booster_upcoming"
+    ]
+  }
+]

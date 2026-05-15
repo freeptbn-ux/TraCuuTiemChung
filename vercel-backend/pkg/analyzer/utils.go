@@ -17,7 +17,7 @@ func NormalizeVaccineName(name string) string {
 
 	// Xóa văn bản trong ngoặc đơn
 	reParen := regexp.MustCompile(`\s*\(.*?\)\s*`)
-	name = reParen.ReplaceAllString(name, " ")
+	name = reParen.ReplaceAllString(name, "")
 
 	// Xóa hậu tố năm như 2023/2024
 	reYear := regexp.MustCompile(`\s+\d{4}/\d{4}\s*$`)
@@ -110,4 +110,15 @@ func AddYears(sourceDate time.Time, years int) time.Time {
 	}
 
 	return time.Date(year, month, day, sourceDate.Hour(), sourceDate.Minute(), sourceDate.Second(), sourceDate.Nanosecond(), sourceDate.Location())
+}
+// NormalizeForMatch strips all non-alphanumeric characters and lowercases the string.
+func NormalizeForMatch(s string) string {
+	s = strings.ToLower(s)
+	var sb strings.Builder
+	for _, r := range s {
+		if (r >= 'a' && r <= 'z') || (r >= '0' && r <= '9') {
+			sb.WriteRune(r)
+		}
+	}
+	return sb.String()
 }

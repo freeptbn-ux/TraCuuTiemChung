@@ -1,0 +1,74 @@
+{
+  "patient_info": {
+    "name": "Nguyễn Bảo Châu",
+    "birth": "08/05/2024",
+    "system_date": "15/05/2026"
+  },
+  "history": [
+    {
+      "vaccine_name": "Hexaxim",
+      "dose": "4",
+      "date": "26/04/2026"
+    },
+    {
+      "vaccine_name": "MENACTRA",
+      "dose": "1",
+      "date": "14/09/2025"
+    },
+    {
+      "vaccine_name": "Imojev",
+      "dose": "1",
+      "date": "10/08/2025"
+    },
+    {
+      "vaccine_name": "Influvac Tetra 2024/2025",
+      "dose": "1",
+      "date": "25/05/2025"
+    },
+    {
+      "vaccine_name": "Hexaxim",
+      "dose": "3",
+      "date": "10/05/2025"
+    },
+    {
+      "vaccine_name": "Synflorix",
+      "dose": "3",
+      "date": "10/02/2025"
+    },
+    {
+      "vaccine_name": "Hexaxim",
+      "dose": "2",
+      "date": "12/01/2025"
+    },
+    {
+      "vaccine_name": "ROTARIXTM",
+      "dose": "2",
+      "date": "12/01/2025"
+    },
+    {
+      "vaccine_name": "Synflorix",
+      "dose": "2",
+      "date": "24/12/2024"
+    },
+    {
+      "vaccine_name": "Hexaxim",
+      "dose": "1",
+      "date": "06/12/2024"
+    },
+    {
+      "vaccine_name": "ROTARIXTM",
+      "dose": "1",
+      "date": "06/12/2024"
+    },
+    {
+      "vaccine_name": "Synflorix",
+      "dose": "1",
+      "date": "19/10/2024"
+    },
+    {
+      "vaccine_name": "IVACTUBER-BCG",
+      "dose": "1",
+      "date": "10/09/2024"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "patient_info": {
+    "name": "Rota RotaTeq Full",
+    "birth": "01/01/2024",
+    "system_date": "15/05/2026"
+  },
+  "history": [
+    {
+      "vaccine_name": "RotaTeq",
+      "dose": "1",
+      "date": "01/03/2024"
+    },
+    {
+      "vaccine_name": "RotaTeq",
+      "dose": "2",
+      "date": "01/05/2024"
+    },
+    {
+      "vaccine_name": "RotaTeq",
+      "dose": "3",
+      "date": "01/07/2024"
+    }
+  ]
+}

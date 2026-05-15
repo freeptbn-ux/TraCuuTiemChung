@@ -1,0 +1,14 @@
+{
+  "patient_info": {
+    "name": "Flu < 9yr 1 dose",
+    "birth": "01/01/2022",
+    "system_date": "15/05/2026"
+  },
+  "history": [
+    {
+      "vaccine_name": "Influvac Tetra",
+      "dose": "1",
+      "date": "01/10/2025"
+    }
+  ]
+}

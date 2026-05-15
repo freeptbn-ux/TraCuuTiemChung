@@ -1,0 +1,19 @@
+{
+  "patient_info": {
+    "name": "MMR Bad Interval",
+    "birth": "01/01/2023",
+    "system_date": "15/05/2026"
+  },
+  "history": [
+    {
+      "vaccine_name": "MVVAC",
+      "dose": "1",
+      "date": "01/10/2023"
+    },
+    {
+      "vaccine_name": "MMR",
+      "dose": "1",
+      "date": "15/11/2023"
+    }
+  ]
+}

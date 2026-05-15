@@ -1,0 +1,44 @@
+{
+  "patient_info": {
+    "name": "Nguyễn Tuấn Hưng",
+    "birth": "01/09/2023",
+    "system_date": "15/05/2026"
+  },
+  "history": [
+    {
+      "vaccine_name": "Synflorix",
+      "dose": "2",
+      "date": "18/12/2023"
+    },
+    {
+      "vaccine_name": "Rotarix 1.5ml",
+      "dose": "2",
+      "date": "01/12/2023"
+    },
+    {
+      "vaccine_name": "Infanrix Hexa",
+      "dose": "2",
+      "date": "01/12/2023"
+    },
+    {
+      "vaccine_name": "Synflorix",
+      "dose": "1",
+      "date": "16/11/2023"
+    },
+    {
+      "vaccine_name": "Infanrix Hexa",
+      "dose": "1",
+      "date": "02/11/2023"
+    },
+    {
+      "vaccine_name": "Rotarix 1.5ml",
+      "dose": "1",
+      "date": "02/11/2023"
+    },
+    {
+      "vaccine_name": "BCG-TCDV",
+      "dose": "1",
+      "date": "16/09/2023"
+    }
+  ]
+}

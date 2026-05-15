@@ -35,6 +35,13 @@ type VaccineRule struct {
 	MaxAgeMonthsToStartFirstDoseGroup int       `json:"max_age_months_to_start_first_dose_group"`
 	MaxAgeMonthsForCompletionGroup    int       `json:"max_age_months_for_completion_group"`
 	MinAgeMonthsOverallGroup int              `json:"min_age_months_overall_group"`
+	MinAgeWeeksOverallGroup  int              `json:"min_age_weeks_overall_group"`
+	MinAgeYearsOverallGroup  int              `json:"min_age_years_overall_group"`
+	MinAgeDaysOverallGroup   int              `json:"min_age_days_overall_group"`
+	MinAgeWeeksOverall       int              `json:"min_age_weeks_overall"`
+	MinAgeYearsOverall       int              `json:"min_age_years_overall"`
+	MinAgeDaysOverall        int              `json:"min_age_days_overall"`
+	MinAgeMonthsOverall      int              `json:"min_age_months_overall"`
 	RulesByAge               []AgeRule        `json:"rules_by_age"`
 	Courses                  []Course         `json:"courses"`
 	Regimens                 []Course         `json:"regimens"`
@@ -45,8 +52,20 @@ type VaccineRule struct {
 	InitialSeriesIntervalDays int              `json:"initial_series_interval_days"`
 	Interactions             map[string]Interaction `json:"interactions"`
 	
+	// Booster fields
+	BoosterIntervalYears    int              `json:"booster_interval_years"`
+	BoosterAfterDoseNumber  int              `json:"booster_after_dose_number"`
+	BoosterMaxAgeYears      int              `json:"booster_max_age_years"`
+	
+	// Interaction flags
+	ProvidesMeaslesProtection bool           `json:"provides_measles_protection"`
+	
+	// Dose specific rules for single_series
+	DoseSpecificRules       map[string]DoseRule `json:"dose_specific_rules"`
+
 	// Internal normalization
-	NamesNorm []string `json:"-"`
+	NamesNorm      []string `json:"-"`
+	NamesNormGroup []string `json:"-"`
 }
 
 // AgeRule represents a rule that depends on the age at first dose
@@ -85,6 +104,8 @@ type Member struct {
 	Display            string   `json:"display"`
 	MinAgeMonthsOverall int     `json:"min_age_months_overall"`
 	MinAgeWeeksOverall  int     `json:"min_age_weeks_overall"`
+	MinAgeYearsOverall  int     `json:"min_age_years_overall"`
+	MinAgeDaysOverall   int     `json:"min_age_days_overall"`
 	RulesByAge         []AgeRule `json:"rules_by_age"`
 	Booster            *Booster  `json:"booster"`
 	
@@ -116,8 +137,11 @@ type Interaction struct {
 
 // AnalysisResult represents the outcome of an analysis for a vaccine
 type AnalysisResult struct {
-	VaccineNameForPopup  string    `json:"vaccine_name_for_popup"`
-	Description          string    `json:"description"`
-	EarliestNextDoseDate *time.Time `json:"earliest_next_dose_date"`
-	StatusTags           []string  `json:"status_tags"`
+	VaccineNameForPopup  string     `json:"vaccine_name_for_popup"`
+	Description          string     `json:"description"`
+	EarliestNextDoseDate *time.Time  `json:"earliest_next_dose_date"`
+	StatusTags           []string   `json:"status_tags"`
+	IsMissing            bool       `json:"is_missing"`
+	DoseNumber           int        `json:"dose_number"`
+	Recommendation       string     `json:"recommendation"`
 }

@@ -60,10 +60,10 @@ func TestEngine_PneumoRules(t *testing.T) {
 		
 		foundMixedWarning := false
 		for _, res := range results {
-			if res.VaccineNameForPopup == "Phế cầu (Mixed)" {
+			if res.VaccineNameForPopup == "Phế cầu (nhiều loại)" {
 				foundMixedWarning = true
-				if !contains(res.StatusTags, "error_interchange") {
-					t.Errorf("Expected error_interchange tag for mixed series")
+				if !contains(res.StatusTags, "pneumo_mixed") {
+					t.Errorf("Expected pneumo_mixed tag for mixed series")
 				}
 			}
 		}
@@ -87,8 +87,8 @@ func TestEngine_PneumoRules(t *testing.T) {
 		for _, res := range results {
 			if res.VaccineNameForPopup == "Pneumovax 23 / PNEUMO 23 (Phế cầu)" {
 				foundPneumovax = true
-				if !contains(res.StatusTags, "due") {
-					t.Errorf("Expected Pneumovax 23 to be due")
+				if !contains(res.StatusTags, "eligible") {
+					t.Errorf("Expected Pneumovax 23 to be eligible")
 				}
 			}
 		}

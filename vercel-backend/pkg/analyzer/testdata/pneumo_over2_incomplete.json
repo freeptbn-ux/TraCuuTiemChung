@@ -1,0 +1,14 @@
+{
+  "patient_info": {
+    "name": "Pneumo > 2yr Incomplete",
+    "birth": "01/01/2022",
+    "system_date": "15/05/2026"
+  },
+  "history": [
+    {
+      "vaccine_name": "Synflorix",
+      "dose": "1",
+      "date": "01/03/2022"
+    }
+  ]
+}

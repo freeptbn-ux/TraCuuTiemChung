@@ -1,0 +1,101 @@
+[
+  {
+    "description": "Pneumovax 23 / PNEUMO 23 (Phế cầu): Có thể tiêm 1 mũi thay thế cho mũi 4 của Synflorix (Phế cầu) (do đã trên 2 tuổi).",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "info",
+      "alternative_booster"
+    ],
+    "vaccine_name_for_popup": "Pneumovax 23 / PNEUMO 23 (Phế cầu)"
+  },
+  {
+    "vaccine_name_for_popup": "Vắc xin Sởi-Quai bị-Rubella (MMR-II/Priorix)",
+    "description": "Vắc xin Sởi-Quai bị-Rubella (MMR-II/Priorix) - Cần tiêm mũi 2 (phác đồ MVVAC + MMR) sau 3 năm kể từ mũi MMR/Priorix đầu tiên.",
+    "earliest_next_dose_date": "2027-01-01",
+    "status_tags": [
+      "info",
+      "booster_upcoming"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Varivax (Thủy đậu)",
+    "description": "Varivax (Thủy đậu) - Cần thêm 1 liều. Mũi 2 cách mũi 1 tối thiểu 3 tháng.",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "due"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "MenQuadfi (Sanofi Pasteur)",
+    "description": "MenQuadfi (Sanofi Pasteur) (Gợi ý 1 mũi duy nhất).",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "due"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Menactra (Sanofi Pasteur)",
+    "description": "Menactra (Sanofi Pasteur) (Hoặc lựa chọn thay thế cho MenQuadfi).",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "due"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Vắc xin Viêm não Nhật Bản (Imojev/JEEV/Jevax)",
+    "description": "Vắc xin Viêm não Nhật Bản (Imojev/JEEV/Jevax): Chưa tiêm. Lựa chọn có thể tiêm: Imojev (Sanofi Pasteur), JEEV (Biological E Limited), Jevax/VNNB (Việt Nam).",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "due"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "VA - MENGOC - BC (Não mô cầu BC)",
+    "description": "VA - MENGOC - BC (Não mô cầu BC) (Chưa tiêm - cần 2 liều). đủ điều kiện tuổi",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Typhim Vi (Thương hàn)",
+    "description": "Typhim Vi (Thương hàn) (Chưa tiêm - cần 1 liều). đủ điều kiện tuổi",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Morcvax (Tả)",
+    "description": "Morcvax (Tả) (Chưa tiêm - cần 2 liều). đủ điều kiện tuổi",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Vắc xin 6 trong 1 (Hexaxim/Infanrix Hexa)",
+    "description": "Vắc xin 6 trong 1 (Hexaxim/Infanrix Hexa) (Chưa tiêm - cần 4 liều). đủ điều kiện tuổi",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "eligible"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Viêm Gan A",
+    "description": "Viêm Gan A: Chưa tiêm. Lựa chọn có thể tiêm: Avaxim 80U (Pháp) / Twinrix, HAVAX (Việt Nam).",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "due"
+    ]
+  },
+  {
+    "vaccine_name_for_popup": "Vắc xin Cúm",
+    "description": "Vắc xin Cúm - Cần mũi 2 (do <9 tuổi lần đầu tiêm) cách mũi 1 khoảng 4 tuần. Sau đó nhắc lại hàng năm.",
+    "earliest_next_dose_date": "2026-05-15",
+    "status_tags": [
+      "due",
+      "flu_second_dose"
+    ]
+  }
+]

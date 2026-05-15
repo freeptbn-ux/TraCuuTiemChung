@@ -1,0 +1,14 @@
+{
+  "patient_info": {
+    "name": "Flu Annual Due",
+    "birth": "01/01/2015",
+    "system_date": "15/05/2026"
+  },
+  "history": [
+    {
+      "vaccine_name": "Vaxigrip Tetra",
+      "dose": "1",
+      "date": "01/05/2025"
+    }
+  ]
+}

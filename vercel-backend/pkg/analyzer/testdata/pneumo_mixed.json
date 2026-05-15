@@ -1,0 +1,19 @@
+{
+  "patient_info": {
+    "name": "Pneumo Mixed",
+    "birth": "01/01/2024",
+    "system_date": "15/05/2026"
+  },
+  "history": [
+    {
+      "vaccine_name": "Synflorix",
+      "dose": "1",
+      "date": "01/03/2024"
+    },
+    {
+      "vaccine_name": "Prevenar 13",
+      "dose": "1",
+      "date": "01/05/2024"
+    }
+  ]
+}

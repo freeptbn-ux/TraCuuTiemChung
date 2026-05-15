@@ -1,0 +1,89 @@
+{
+  "patient_info": {
+    "name": "Nguyễn Gia Hân",
+    "birth": "26/06/2025",
+    "system_date": "14/05/2026"
+  },
+  "history": [
+    {
+      "vaccine_name": "MENACTRA",
+      "dose": "1",
+      "date": "19/04/2026"
+    },
+    {
+      "vaccine_name": "MVVAC",
+      "dose": "1",
+      "date": "05/04/2026"
+    },
+    {
+      "vaccine_name": "VA - MENGOC - BC",
+      "dose": "2",
+      "date": "17/03/2026"
+    },
+    {
+      "vaccine_name": "Influvac Tetra",
+      "dose": "1",
+      "date": "04/02/2026"
+    },
+    {
+      "vaccine_name": "VA - MENGOC - BC",
+      "dose": "1",
+      "date": "20/01/2026"
+    },
+    {
+      "vaccine_name": "VAXIGRIP 0.5ml",
+      "dose": "1",
+      "date": "05/01/2026"
+    },
+    {
+      "vaccine_name": "Infanrix Hexa",
+      "dose": "3",
+      "date": "25/12/2025"
+    },
+    {
+      "vaccine_name": "Prevenar 13",
+      "dose": "3",
+      "date": "29/11/2025"
+    },
+    {
+      "vaccine_name": "Infanrix Hexa",
+      "dose": "2",
+      "date": "18/11/2025"
+    },
+    {
+      "vaccine_name": "Rota Teq",
+      "dose": "3",
+      "date": "16/11/2025"
+    },
+    {
+      "vaccine_name": "Prevenar 13",
+      "dose": "2",
+      "date": "17/09/2025"
+    },
+    {
+      "vaccine_name": "Rota Teq",
+      "dose": "2",
+      "date": "17/09/2025"
+    },
+    {
+      "vaccine_name": "Infanrix Hexa",
+      "dose": "1",
+      "date": "29/08/2025"
+    },
+    {
+      "vaccine_name": "Rota Teq",
+      "dose": "1",
+      "date": "17/08/2025"
+    },
+    {
+      "vaccine_name": "Prevenar 13",
+      "dose": "1",
+      "date": "17/08/2025"
+    },
+    {
+      "vaccine_name": "BCG-TCDV",
+      "dose": "1",
+      "date": "20/07/2025"
+    }
+  ]
+}
