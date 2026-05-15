@@ -1,14 +1,18 @@
 package portal
 
 import (
+	"context"
 	"fmt"
+	"log/slog"
 	"net/http/cookiejar"
+	"net/url"
 	"regexp"
 	"strings"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/go-resty/resty/v2"
+	"github.com/redis/go-redis/v9"
 	"vercel-backend/pkg/models"
 )
 
@@ -23,6 +27,8 @@ type PortalClient struct {
 	restClient *resty.Client
 	username   string
 	password   string
+	redis      *redis.Client
+	locker     Locker
 
 	LoginURL  string
 	IndexURL  string
@@ -30,11 +36,17 @@ type PortalClient struct {
 	DetailURL string
 }
 
-// NewPortalClient creates a new portal client with cookie jar support
-func NewPortalClient(username, password string) *PortalClient {
-	jar, _ := cookiejar.New(nil)
+// NewPortalClient creates a new portal client with optional Redis support
+func NewPortalClient(username, password string, redisClient *redis.Client) *PortalClient {
 	client := resty.New()
-	client.SetCookieJar(jar)
+	
+	if redisClient != nil {
+		jar := NewRedisCookieJar(redisClient, username)
+		client.SetCookieJar(jar)
+	} else {
+		jar, _ := cookiejar.New(nil)
+		client.SetCookieJar(jar)
+	}
 	client.SetTimeout(30 * time.Second)
 	client.SetHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0")
 
@@ -42,6 +54,8 @@ func NewPortalClient(username, password string) *PortalClient {
 		restClient: client,
 		username:   username,
 		password:   password,
+		redis:      redisClient,
+		locker:     NewRedisLocker(redisClient),
 		LoginURL:   LoginURL,
 		IndexURL:   IndexURL,
 		SearchURL:  SearchURL,
@@ -49,8 +63,75 @@ func NewPortalClient(username, password string) *PortalClient {
 	}
 }
 
-// Login performs login to the portal and stores cookies in the jar
+// RedisClient returns the underlying redis client
+func (pc *PortalClient) RedisClient() *redis.Client {
+	return pc.redis
+}
+
+// Login performs login with distributed lock to avoid race conditions
 func (pc *PortalClient) Login() error {
+	if pc.redis == nil {
+		return pc.performLogin()
+	}
+
+	lockKey := fmt.Sprintf("portal:lock:login:%s", pc.username)
+	ctx := context.Background()
+
+	// Wait and retry logic
+	maxRetries := 20 // 20 * 500ms = 10s
+	for i := 0; i < maxRetries; i++ {
+		ok, value, err := pc.locker.Acquire(ctx, lockKey, 15*time.Second)
+		if err != nil {
+			return err
+		}
+
+		if ok {
+			slog.Info("Acquiring login lock...", "key", lockKey)
+			defer func() {
+				if err := pc.locker.Release(ctx, lockKey, value); err != nil {
+					slog.Error("Failed to release lock", "key", lockKey, "error", err)
+				}
+			}()
+
+			// Double check if already logged in by another worker
+			if pc.IsLoggedIn() {
+				slog.Info("Already logged in by another worker, skipping login", "key", lockKey)
+				return nil
+			}
+
+			return pc.performLogin()
+		}
+
+		// Lock busy, wait and check if someone else finished
+		slog.Debug("Login lock busy, waiting...", "key", lockKey, "attempt", i+1)
+		time.Sleep(500 * time.Millisecond)
+
+		if pc.IsLoggedIn() {
+			slog.Info("Detected successful login from another worker while waiting", "key", lockKey)
+			return nil
+		}
+	}
+
+	return fmt.Errorf("timeout waiting for login lock after 10s")
+}
+
+// IsLoggedIn checks if the current session is valid by checking the cookie jar
+func (pc *PortalClient) IsLoggedIn() bool {
+	if pc.restClient.GetClient().Jar == nil {
+		return false
+	}
+	u, _ := url.Parse(pc.LoginURL)
+	cookies := pc.restClient.GetClient().Jar.Cookies(u)
+	for _, c := range cookies {
+		if c.Name == ".ASPXAUTH" {
+			return true
+		}
+	}
+	return false
+}
+
+// performLogin performs the actual login to the portal
+func (pc *PortalClient) performLogin() error {
 	if pc.username == "" || pc.password == "" {
 		return fmt.Errorf("PORTAL_USERNAME or PORTAL_PASSWORD not set")
 	}

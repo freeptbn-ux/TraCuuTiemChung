@@ -25,7 +25,7 @@ func TestParseSearchResults(t *testing.T) {
 	{"MA_DOI_TUONG":"98765"}
 	`
 
-	pc := NewPortalClient("", "")
+	pc := NewPortalClient("user", "pass", nil)
 	results, err := pc.ParseSearchResults(html)
 	if err != nil {
 		t.Fatalf("Failed to parse: %v", err)
@@ -77,7 +77,7 @@ func TestParsePatientDetail(t *testing.T) {
 	</table>
 	`
 
-	pc := NewPortalClient("", "")
+	pc := NewPortalClient("user", "pass", nil)
 	detail, err := pc.ParsePatientDetail(html)
 	if err != nil {
 		t.Fatalf("Failed to parse detail: %v", err)
@@ -142,7 +142,7 @@ func TestRetryLoginMechanism(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	pc := NewPortalClient("user", "pass")
+	pc := NewPortalClient("user", "pass", nil)
 	pc.LoginURL = ts.URL + "/login"
 	pc.SearchURL = ts.URL + "/search"
 	pc.IndexURL = ts.URL + "/index"

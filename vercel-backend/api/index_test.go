@@ -67,7 +67,7 @@ func TestHealthCheck(t *testing.T) {
 	var response map[string]string
 	err := json.Unmarshal(w.Body.Bytes(), &response)
 	assert.NoError(t, err)
-	assert.Equal(t, "ok", response["status"])
+	assert.Equal(t, "success", response["status"])
 }
 
 func TestLookupAuth(t *testing.T) {

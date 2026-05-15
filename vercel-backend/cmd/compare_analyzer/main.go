@@ -20,7 +20,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	pc := portal.NewPortalClient("", "")
+	pc := portal.NewPortalClient("", "", nil)
 	detail, err := pc.ParsePatientDetail(string(content))
 	if err != nil {
 		fmt.Printf("Error parsing HTML: %v\n", err)

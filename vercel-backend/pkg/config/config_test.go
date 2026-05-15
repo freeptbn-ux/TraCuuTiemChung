@@ -9,8 +9,10 @@ func TestLoadConfig(t *testing.T) {
 	// Mock environment variables
 	os.Setenv("X_API_KEY", "test-key")
 	os.Setenv("PORT", "9090")
+	os.Setenv("REDIS_URL", "redis://localhost:6379")
 	defer os.Unsetenv("X_API_KEY")
 	defer os.Unsetenv("PORT")
+	defer os.Unsetenv("REDIS_URL")
 
 	cfg := LoadConfig()
 
@@ -20,6 +22,10 @@ func TestLoadConfig(t *testing.T) {
 
 	if cfg.PORT != "9090" {
 		t.Errorf("Expected PORT to be '9090', got '%s'", cfg.PORT)
+	}
+
+	if cfg.Redis.URL != "redis://localhost:6379" {
+		t.Errorf("Expected Redis.URL to be 'redis://localhost:6379', got '%s'", cfg.Redis.URL)
 	}
 }
 

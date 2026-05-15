@@ -11,7 +11,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"vercel-backend/pkg/analyzer"
 	"vercel-backend/pkg/config"
+	"vercel-backend/pkg/logger"
 	"vercel-backend/pkg/portal"
+	"log/slog"
+	"vercel-backend/api/middleware"
+
+	"github.com/redis/go-redis/v9"
 )
 
 var (
@@ -20,52 +25,77 @@ var (
 )
 
 func init() {
+	logger.InitLogger()
 	cfg = config.LoadConfig()
-	pc = portal.NewPortalClient(cfg.PORTAL_USERNAME, cfg.PORTAL_PASSWORD)
+
+	var redisClient *redis.Client
+	if cfg.Redis.URL != "" {
+		opts, err := redis.ParseURL(cfg.Redis.URL)
+		if err == nil {
+			redisClient = redis.NewClient(opts)
+			slog.Info("redis connected", "url", cfg.Redis.URL)
+		} else {
+			slog.Error("failed to parse redis url", "error", err)
+		}
+	}
+
+	pc = portal.NewPortalClient(cfg.PORTAL_USERNAME, cfg.PORTAL_PASSWORD, redisClient)
 	// Vercel environment usually doesn't need to set Gin mode, but it's good practice
 	if os.Getenv("VERCEL") == "1" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 }
 
-// AuthRequired middleware checks for X-API-KEY header
-func AuthRequired() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		apiKey := c.GetHeader("X-API-KEY")
-		if apiKey == "" {
-			// Fallback to query param if needed (some clients might use it)
-			apiKey = c.Query("api_key")
-		}
+// StandardResponse is the base for all API responses
+type StandardResponse struct {
+	Status    string      `json:"status"`
+	Data      interface{} `json:"data,omitempty"`
+	Message   string      `json:"message,omitempty"`
+	RequestID string      `json:"request_id"`
+}
 
-		if apiKey != cfg.X_API_KEY {
-			c.JSON(http.StatusForbidden, gin.H{
-				"status":  "error",
-				"message": "Invalid API Key",
-			})
-			c.Abort()
-			return
-		}
-		c.Next()
-	}
+func sendSuccess(c *gin.Context, data interface{}) {
+	c.JSON(http.StatusOK, StandardResponse{
+		Status:    "success",
+		Data:      data,
+		RequestID: c.GetString("request_id"),
+	})
+}
+
+func sendError(c *gin.Context, code int, message string) {
+	c.AbortWithStatusJSON(code, StandardResponse{
+		Status:    "error",
+		Message:   message,
+		RequestID: c.GetString("request_id"),
+	})
 }
 
 // Handler is the entry point for Vercel Go runtime
 func Handler(w http.ResponseWriter, r *http.Request) {
 	router := gin.New()
-	router.Use(gin.Recovery())
+	
+	// Global Middleware
+	router.Use(
+		middleware.RequestID(),
+		middleware.LoggerMiddleware(),
+		middleware.ErrorHandler(),
+		gin.Recovery(),
+	)
 
 	// Health check
 	router.GET("/api/health", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"status":      "ok",
-			"message":     "Backend is running",
+		sendSuccess(c, gin.H{
 			"environment": os.Getenv("VERCEL_ENV"),
+			"message":     "Backend is running",
 		})
 	})
 
-	// API Group with Auth
+	// API Group with Auth & Rate Limit
 	api := router.Group("/api")
-	api.Use(AuthRequired())
+	api.Use(
+		middleware.AuthRequired(cfg),
+		middleware.RateLimit(pc.RedisClient(), 50, time.Minute),
+	)
 	{
 		api.POST("/lookup", handleLookup)
 		api.POST("/analyze", handleAnalyze)
@@ -81,23 +111,18 @@ type LookupRequest struct {
 func handleLookup(c *gin.Context) {
 	var req LookupRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Phone number is required"})
+		sendError(c, http.StatusBadRequest, "Phone number is required")
 		return
 	}
 
 	results, err := pc.LookupPatients(req.Phone)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": fmt.Sprintf("Portal lookup error: %v", err),
-		})
+		slog.Error("lookup failed", "phone", req.Phone, "error", err)
+		c.Error(err) // Centralized error handling
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"status": "success",
-		"data":   results,
-	})
+	sendSuccess(c, results)
 }
 
 type Recommendation struct {
@@ -131,27 +156,22 @@ type AnalyzeResponse struct {
 func handleAnalyze(c *gin.Context) {
 	var req AnalyzeRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Patient ID is required"})
+		sendError(c, http.StatusBadRequest, "Patient ID is required")
 		return
 	}
 
 	// 1. Fetch details from portal
 	detail, err := pc.GetVaccinationHistory(req.PatientID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": fmt.Sprintf("Portal history error: %v", err),
-		})
+		slog.Error("history fetch failed", "patient_id", req.PatientID, "error", err)
+		c.Error(err)
 		return
 	}
 
 	// 2. Parse dates
 	dob, err := time.Parse("02/01/2006", detail.PatientInfo.Birth)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": fmt.Sprintf("Failed to parse DOB: %v", err),
-		})
+		c.Error(fmt.Errorf("failed to parse DOB: %w", err))
 		return
 	}
 
@@ -170,10 +190,7 @@ func handleAnalyze(c *gin.Context) {
 
 	engine, err := analyzer.NewEngine(rulesPath, dob, analysisDate)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": fmt.Sprintf("Failed to initialize analyzer: %v", err),
-		})
+		c.Error(fmt.Errorf("failed to initialize analyzer: %w", err))
 		return
 	}
 
@@ -235,14 +252,11 @@ func handleAnalyze(c *gin.Context) {
 		})
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"status": "success",
-		"data": AnalyzeResponse{
-			PatientName:          detail.PatientInfo.Name,
-			DOB:                  detail.PatientInfo.Birth,
-			AnalysisDate:         detail.PatientInfo.SystemDate,
-			MissingVaccines:      recommendations,
-			AdministeredVaccines: history,
-		},
+	sendSuccess(c, AnalyzeResponse{
+		PatientName:          detail.PatientInfo.Name,
+		DOB:                  detail.PatientInfo.Birth,
+		AnalysisDate:         detail.PatientInfo.SystemDate,
+		MissingVaccines:      recommendations,
+		AdministeredVaccines: history,
 	})
 }

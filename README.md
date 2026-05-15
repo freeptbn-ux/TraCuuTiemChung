@@ -39,13 +39,19 @@ Dự án bao gồm ứng dụng Android và hệ thống backend hiệu năng ca
 ### 1. Triển khai Backend (Vercel)
 1. Truy cập [Vercel](https://vercel.com) và tạo project mới từ repository này.
 2. Thiết lập **Root Directory** là `vercel-backend`.
-3. Thêm các Environment Variables:
-   - `UPSTASH_REDIS_REST_URL`
-   - `UPSTASH_REDIS_REST_TOKEN`
-   - `X_API_KEY`
-   - `PORTAL_USERNAME`
-   - `PORTAL_PASSWORD`
-4. Deploy và lấy URL của backend.
+3. Thêm các **Environment Variables** sau:
+   - `UPSTASH_REDIS_REST_URL`: URL kết nối Redis từ Upstash.
+   - `UPSTASH_REDIS_REST_TOKEN`: REST Token từ Upstash.
+   - `X_API_KEY`: Mã bảo mật để App Android có thể gọi API (phải khớp với `BuildConfig.X_API_KEY`).
+   - `PORTAL_USERNAME`: Tài khoản đăng nhập Cổng tiêm chủng.
+   - `PORTAL_PASSWORD`: Mật khẩu đăng nhập Cổng tiêm chủng.
+4. Deploy và cấu hình Custom Domain nếu cần.
+
+### 2. Cấu hình Redis
+Hệ thống sử dụng Redis để:
+- **Session Persistence**: Duy trì trạng thái đăng nhập giữa các Lambda instances của Vercel.
+- **Distributed Locking**: Đảm bảo chỉ có một process thực hiện đăng nhập tại một thời điểm, tránh bị Portal chặn (Bypass Rate Limit).
+- **API Rate Limiting**: Giới hạn tần suất gọi API từ App (mặc định 50 req/phút).
 
 ### 2. Chạy Backend Local
 1. Chuyển vào thư mục backend: `cd vercel-backend`
@@ -67,10 +73,11 @@ Dự án này hỗ trợ **ADB MCP Server** để hỗ trợ AI Agent tự độ
 }
 ```
 
-## 📝 Cập nhật gần đây
-- **Sửa lỗi Null Pointer**: Xử lý trường hợp backend trả về `data: null` khi không tìm thấy kết quả.
-- **Tối ưu hóa Search**: Khởi tạo mảng trống thay vì nil slice để đảm bảo JSON output luôn là mảng `[]`.
-- **Cấu hình Git Identity**: Đảm bảo commit đúng danh tính `skul9x` để bypass Vercel check.
+## 📝 Cập nhật gần đây (v1.1.0)
+- **Hệ thống Backend (Go)**: Hoàn tất chuyển đổi từ Python sang Go, tối ưu hóa tốc độ và bảo mật.
+- **Middleware Hardening**: Tích hợp Rate Limiting, Request ID, và Centralized Error Handling.
+- **Session Management**: Triển khai Redis Cookie Jar và Distributed Lock để xử lý concurrency.
+- **E2E Verified**: Đã kiểm thử thành công trên thiết bị thật với dữ liệu thực tế từ VNCDC.
 
 ---
 Copyright 2026 Nguyễn Duy Trường.
