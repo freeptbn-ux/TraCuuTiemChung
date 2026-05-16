@@ -57,3 +57,6 @@ vercel-backend/python_backup/
 
 # Python scripts (prevent Vercel from detecting Python runtime)
 *.py
+
+.vercel
+.env*.local

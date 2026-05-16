@@ -2,7 +2,7 @@
   "meta": {
     "schema_version": "1.1.0",
     "awf_version": "3.3.0",
-    "last_updated": "2026-05-16T01:11:00Z"
+    "last_updated": "2026-05-16T16:00:00Z"
   },
   "project": {
     "name": "Tra Cứu Tiêm Chủng",
@@ -39,17 +39,21 @@
   "business_rules": [
     {
       "rule": "Stateless Auth",
-      "explained": "Mỗi request lên Vercel phải Login lại vào VNCDC Portal để lấy Cookie vì môi trường serverless không giữ session."
+      "explained": "Dùng Redis CookieJar để lưu session. Nếu session lỗi, tự động login lại và retry request."
     },
     {
       "rule": "Embedded Rules",
-      "explained": "File vaccine_rules.json được nhúng trực tiếp vào binary Go bằng go:embed để tránh lỗi đường dẫn trên Vercel."
+      "explained": "File vaccine_rules.json được nhúng trực tiếp vào binary Go bằng go:embed."
     }
   ],
   "knowledge_items": {
     "gotchas": [
       "Vercel Go runtime không tự động bundle file tĩnh ngoài thư mục api, cần dùng go:embed.",
-      "Cần X-API-KEY để xác thực giữa App và Backend."
+      "Cần X-API-KEY để xác thực giữa App và Backend.",
+      "Portal VNCDC endpoint /TimKiem yêu cầu GET request với đầy đủ params, mặc dù form HTML là POST.",
+      "ASP.NET Error pages ('an error occurred') thường là dấu hiệu session cookie bị invalid, cần re-login.",
+      "Cần ép buộc Domain và Path cho Cookie trong RedisCookieJar để tránh bị HTTP client bỏ qua khi domain không khớp chính xác.",
+      "Trả về 401 Unauthorized thay vì 403 khi thiếu/sai API key để kích hoạt luồng login/re-auth trên mobile app."
     ]
   }
 }

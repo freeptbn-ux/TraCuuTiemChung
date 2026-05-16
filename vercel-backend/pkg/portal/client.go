@@ -130,6 +130,78 @@ func (pc *PortalClient) IsLoggedIn() bool {
 	return false
 }
 
+// ConnectivityStatus đại diện cho kết quả kiểm tra kết nối
+type ConnectivityStatus struct {
+	URL          string `json:"url"`
+	StatusCode   int    `json:"status_code"`
+	ResponseTime int64  `json:"response_time_ms"`
+	IsBlocked    bool   `json:"is_blocked"`
+	HasToken     bool   `json:"has_token"`
+	Error        string `json:"error,omitempty"`
+	BodySnippet  string `json:"body_snippet,omitempty"`
+	LookupResult string `json:"lookup_result,omitempty"` // Kết quả tra cứu thử nghiệm
+	SearchBody   string `json:"search_body,omitempty"`
+}
+
+// CheckPortalConnectivity kiểm tra xem portal có thể truy cập được không và có dấu hiệu bị chặn IP không
+func (pc *PortalClient) CheckPortalConnectivity() ConnectivityStatus {
+	start := time.Now()
+	resp, err := pc.restClient.R().Get(pc.LoginURL)
+	duration := time.Since(start).Milliseconds()
+
+	status := ConnectivityStatus{
+		URL:          pc.LoginURL,
+		ResponseTime: duration,
+	}
+
+	if err != nil {
+		status.Error = err.Error()
+		status.IsBlocked = true
+		return status
+	}
+
+	status.StatusCode = resp.StatusCode()
+	body := resp.String()
+	
+	if len(body) > 200 {
+		status.BodySnippet = body[:200]
+	} else {
+		status.BodySnippet = body
+	}
+
+	if strings.Contains(body, "__RequestVerificationToken") {
+		status.HasToken = true
+	} else if resp.StatusCode() == 200 {
+		status.IsBlocked = true
+		status.Error = "Response does not look like login page"
+	}
+
+	// Thử tra cứu một số điện thoại mẫu để xem phản hồi thực tế
+	if status.HasToken {
+		patients, err := pc.LookupPatients("0388634123")
+		if err != nil {
+			status.LookupResult = fmt.Sprintf("Lookup Error: %v", err)
+		} else {
+			status.LookupResult = fmt.Sprintf("Found %d patients", len(patients))
+			// If 0 patients, capture snippet from internal state or by re-running
+			// Actually, let's just re-run and capture snippet if 0
+			if len(patients) == 0 {
+				searchResp, _ := pc.restClient.R().
+					SetQueryParam("SoDienThoai", "0388634123").
+					SetQueryParam("Length", "5").
+					SetHeader("X-Requested-With", "XMLHttpRequest").
+					SetHeader("Referer", pc.IndexURL).
+					Get(pc.SearchURL)
+				status.SearchBody = searchResp.String()
+			}
+		}
+	}
+
+	return status
+}
+
+
+
 // performLogin performs the actual login to the portal
 func (pc *PortalClient) performLogin() error {
 	if pc.username == "" || pc.password == "" {
@@ -158,8 +230,9 @@ func (pc *PortalClient) performLogin() error {
 			"__RequestVerificationToken": token,
 			"UserName":                   pc.username,
 			"password":                   pc.password,
-			"remember_me":                "false",
+			"remember_me":                "true",
 		}).
+		SetHeader("Referer", pc.LoginURL).
 		Post(pc.LoginURL)
 
 	if err != nil {
@@ -228,27 +301,38 @@ func (pc *PortalClient) LookupPatients(phone string) ([]models.Patient, error) {
 		"CurrentSystemDate": "",
 	}
 
-	resp, err := pc.restClient.R().
+	req := pc.restClient.R().
 		SetQueryParams(searchParams).
+		SetQueryParam("X-Requested-With", "XMLHttpRequest").
 		SetHeader("X-Requested-With", "XMLHttpRequest").
 		SetHeader("Referer", pc.IndexURL).
-		Get(pc.SearchURL)
+		SetHeader("Accept", "text/html, */*").
+		SetHeader("Accept-Language", "vi,en;q=0.9")
 
+	resp, err := req.Get(pc.SearchURL)
 	if err != nil {
 		return nil, err
 	}
 
 	htmlContent := resp.String()
-	// Detect session expiry (server returned login page instead of data)
-	if strings.Contains(htmlContent, "UserName") && strings.Contains(htmlContent, "__RequestVerificationToken") {
-		slog.Warn("Session expired mid-request, re-logging in", "phone", phone)
+	
+	// Detect session expiry or server errors
+	isErrorPage := strings.Contains(htmlContent, "an error occurred") || 
+	               (strings.Contains(htmlContent, "UserName") && strings.Contains(htmlContent, "__RequestVerificationToken"))
+	
+	if isErrorPage {
+		slog.Warn("Session expired or error page detected, re-logging in", "phone", phone)
 		if err := pc.Login(); err != nil {
 			return nil, fmt.Errorf("re-login failed: %w", err)
 		}
+		// Retry with same headers and params
 		resp, err = pc.restClient.R().
 			SetQueryParams(searchParams).
+			SetQueryParam("X-Requested-With", "XMLHttpRequest").
 			SetHeader("X-Requested-With", "XMLHttpRequest").
 			SetHeader("Referer", pc.IndexURL).
+			SetHeader("Accept", "text/html, */*").
+			SetHeader("Accept-Language", "vi,en;q=0.9").
 			Get(pc.SearchURL)
 		if err != nil {
 			return nil, err
@@ -256,15 +340,15 @@ func (pc *PortalClient) LookupPatients(phone string) ([]models.Patient, error) {
 		htmlContent = resp.String()
 	}
 
-	results, err := pc.ParseSearchResults(htmlContent)
-	if err == nil && len(results) == 0 {
+	if !strings.Contains(htmlContent, "doiTuongSearchResult") && !strings.Contains(htmlContent, "không có đối tượng nào") {
 		snippet := htmlContent
-		if len(snippet) > 500 {
-			snippet = snippet[:500]
+		if len(snippet) > 200 {
+			snippet = snippet[:200]
 		}
-		slog.Warn("LookupPatients: empty results", "phone", phone, "html_snippet", snippet)
+		slog.Warn("LookupPatients: Results table not found", "phone", phone, "snippet", snippet)
 	}
-	return results, err
+
+	return pc.ParseSearchResults(htmlContent)
 }
 
 // ParseSearchResults parses the HTML content of search results

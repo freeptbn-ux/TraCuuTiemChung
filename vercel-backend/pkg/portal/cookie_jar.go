@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -21,7 +22,7 @@ type RedisCookieJar struct {
 func NewRedisCookieJar(client *redis.Client, username string) *RedisCookieJar {
 	return &RedisCookieJar{
 		redisClient: client,
-		key:         fmt.Sprintf("portal:session:%s", username),
+		key:         fmt.Sprintf("portal:session:v2:%s", username),
 		ttl:         24 * time.Hour,
 	}
 }
@@ -32,10 +33,6 @@ func (jar *RedisCookieJar) SetCookies(u *url.URL, cookies []*http.Cookie) {
 		return
 	}
 
-	// We only care about cookies from the portal domain
-	if u != nil && !jar.isPortalDomain(u.Host) {
-		return
-	}
 
 	// Load existing cookies to merge
 	existing := jar.loadFromRedis()
@@ -67,15 +64,28 @@ func (jar *RedisCookieJar) Cookies(u *url.URL) []*http.Cookie {
 		return nil
 	}
 
-	if u != nil && !jar.isPortalDomain(u.Host) {
+	// Only return cookies for portal domain
+	if !jar.isPortalDomain(u.Host) {
 		return nil
 	}
 
-	return jar.loadFromRedis()
+	cookies := jar.loadFromRedis()
+	
+	// Ensure Domain and Path are set if empty to make net/http client send them
+	for _, c := range cookies {
+		if c.Domain == "" {
+			c.Domain = u.Host
+		}
+		if c.Path == "" {
+			c.Path = "/"
+		}
+	}
+
+	return cookies
 }
 
 func (jar *RedisCookieJar) isPortalDomain(host string) bool {
-	return host == "tiemchung.vncdc.gov.vn"
+	return strings.Contains(host, "vncdc.gov.vn")
 }
 
 func (jar *RedisCookieJar) saveToRedis(cookies []*http.Cookie) {

@@ -1,105 +1,67 @@
-# 💉 Tra Cứu Tiêm Chủng (Vaccination Lookup)
+# Tra Cứu Tiêm Chủng (VNCDC Portal Integration)
 
-Ứng dụng Android giúp tra cứu lịch sử tiêm chủng và nhận khuyến nghị vaccine cá nhân hóa bằng cách tích hợp trực tiếp với cổng thông tin VNCDC. Hệ thống sử dụng engine phân tích thông minh để đưa ra các đề xuất dựa trên độ tuổi, lịch sử tiêm và các quy tắc y tế phức tạp.
+Hệ thống tra cứu lịch sử tiêm chủng và phân tích kế hoạch tiêm chủng tự động, tích hợp dữ liệu từ Cổng thông tin tiêm chủng Quốc gia (VNCDC).
 
----
+## 🌟 Tính năng chính
 
-## 🏗️ Kiến trúc hệ thống
+- **Tra cứu nhanh:** Tìm kiếm thông tin bệnh nhân và lịch sử tiêm chủng qua số điện thoại từ hệ thống VNCDC.
+- **Phân tích thông minh:** Tự động đối chiếu lịch sử tiêm với bộ quy tắc (`vaccine_rules.json`) để đưa ra khuyến nghị các mũi tiêm tiếp theo.
+- **Quản lý phiên (Session Management):** Cơ chế quản lý Cookie Jar qua Redis (Upstash) giúp duy trì kết nối ổn định và tối ưu hóa tốc độ truy cập.
+- **Đa nền tảng:** 
+  - **Backend:** Chạy trên môi trường Serverless của Vercel (Go & Python Legacy).
+  - **Mobile:** Ứng dụng Android viết bằng Kotlin (Jetpack Compose).
 
-```mermaid
-graph TD
-    A[Android App (Kotlin/Compose)] -- JSON (X-API-KEY) --> B[Vercel Backend (Go)]
-    B -- Scraping (Cookie Jar) --> C[Cổng VNCDC (vncdc.gov.vn)]
-    B -- Cache/Lock --> D[Upstash Redis]
-    B -- Engine --> E[Vaccine Rules JSON]
-```
+## 🛠 Công nghệ sử dụng
 
----
+### Backend (Golang)
+- **Framework:** Gin Gonic (Web Framework).
+- **Library:** Resty (HTTP Client), Goquery (HTML Parsing).
+- **Database/Cache:** Redis (Upstash) để lưu trữ Cookie Jar.
+- **Deployment:** Vercel Serverless Functions.
 
-## 🚀 Tính năng chính
+### Android App
+- **Language:** Kotlin.
+- **UI Framework:** Jetpack Compose.
+- **Network:** Retrofit + OkHttp.
+- **Architecture:** MVVM.
 
-### 📱 Ứng dụng Android
-- **Tra cứu nhanh**: Tìm kiếm hồ sơ bệnh nhân qua số điện thoại.
-- **Lịch sử chi tiết**: Hiển thị danh sách các mũi tiêm đã thực hiện từ cổng VNCDC.
-- **Phân tích thông minh**: Đề xuất các mũi tiêm còn thiếu hoặc đến lịch.
-- **Cảnh báo an toàn**: Phát hiện tương tác giữa các loại vaccine (VD: khoảng cách giữa các vaccine sống).
-- **Giao diện hiện đại**: Sử dụng Jetpack Compose với Material Design 3.
-
-### ⚙️ Backend (Vercel Go)
-- **Scraping Engine**: Tự động đăng nhập và trích xuất dữ liệu từ cổng VNCDC.
-- **High Performance**: Viết bằng Go, tối ưu hóa tốc độ xử lý và bộ nhớ.
-- **Warm Start Optimization**: Sử dụng Router toàn cục và khởi tạo một lần (Singleton Pattern) giúp phản hồi cực nhanh trên Vercel.
-- **Distributed Locking**: Sử dụng Redis để quản lý session và tránh xung đột khi đăng nhập đồng thời.
-- **Stateless Architecture**: Chạy hoàn hảo trên môi trường Serverless của Vercel với cấu trúc Monolithic API.
-
----
-
-## 🛠️ Công nghệ sử dụng
-
-| Thành phần | Công nghệ |
-|---|---|
-| **Mobile** | Kotlin, Jetpack Compose, Retrofit, OkHttp, Coroutines, Kotlinx Serialization |
-| **Backend** | Go (Golang), Gin Gonic, Resty, GoQuery, slog |
-| **Dữ liệu** | Upstash Redis (Session & Rate Limiting) |
-| **Infrastructure** | Vercel (Serverless Functions) |
-
----
+### Legacy Backend (Python)
+- **Framework:** Flask-like (Serverless).
+- **Library:** Requests, BeautifulSoup4.
 
 ## 📁 Cấu trúc thư mục
 
-```
-.
-├── app/                # Mã nguồn ứng dụng Android (Kotlin)
-├── vercel-backend/      # Backend Go chạy trên Vercel
-│   ├── api/            # Các endpoint API (lookup, analyze)
-│   ├── pkg/            # Thư viện logic (portal, analyzer, middleware)
-│   └── assets/         # Quy tắc tiêm chủng (vaccine_rules.json)
-├── engine/             # Engine phân tích dùng chung (Go)
-├── models/             # Định nghĩa cấu trúc dữ liệu (Go)
-└── .brain/             # Dữ liệu tri thức dự án (AI Context)
-```
+- `app/`: Mã nguồn ứng dụng Android.
+- `vercel-backend/`: Mã nguồn Backend hiện tại (Golang).
+- `vercel-backend-python-legacy/`: Mã nguồn Backend cũ (Python) dùng để tham chiếu/backup.
+- `.brain/`: Thư mục lưu trữ kiến thức và ngữ cảnh làm việc của AI Assistant.
+- `docs/`: Tài liệu kiến trúc, hướng dẫn API và các giai đoạn phát triển.
 
----
+## ⚙️ Hướng dẫn cài đặt
 
-## 🔧 Hướng dẫn cài đặt
+### Backend (Go)
+1. Cài đặt [Go](https://golang.org/dl/) (phiên bản 1.22 trở lên).
+2. Di chuyển vào thư mục `vercel-backend`.
+3. Tạo file `.env` từ `.env.example` và điền các thông tin:
+   - `PORTAL_USERNAME`, `PORTAL_PASSWORD`: Tài khoản portal VNCDC.
+   - `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`: Thông tin kết nối Redis.
+   - `X_API_KEY`: Key bảo mật để App kết nối.
+4. Chạy server local: `go run cmd/server/main.go`.
 
-### 1. Cấu hình Backend (Vercel)
-Tạo dự án trên Vercel và thiết lập các biến môi trường sau:
-- `X_API_KEY`: Khóa bí mật dùng để xác thực giữa App và Backend.
-- `PORTAL_USERNAME`: Tài khoản cổng VNCDC.
-- `PORTAL_PASSWORD`: Mật khẩu cổng VNCDC.
-- `UPSTASH_REDIS_REST_URL`: URL Redis từ Upstash.
-- `UPSTASH_REDIS_REST_TOKEN`: Token Redis từ Upstash.
+### Android
+1. Mở project bằng Android Studio.
+2. Cấu hình `X_API_KEY` trong file `local.properties`.
+3. Build và chạy trên thiết bị giả lập hoặc thật.
 
-### 2. Cấu hình Android App
-Tạo file `local.properties` trong thư mục gốc:
-```properties
-X_API_KEY=your_api_key_here
-BASE_URL=https://your-project.vercel.app/
-```
+## 📝 Cách sử dụng
 
-### 3. Build & Chạy
-- **Android**: Mở bằng Android Studio và nhấn Run, hoặc dùng lệnh:
-  ```bash
-  ./gradlew assembleDebug
-  ```
-- **Backend (Local)**:
-  ```bash
-  cd vercel-backend
-  go run cmd/server/main.go
-  ```
+- Sử dụng ứng dụng Android để nhập số điện thoại cần tra cứu.
+- Backend sẽ kết nối với Portal VNCDC, lấy dữ liệu HTML, parse thông tin và trả về kết quả JSON cho App.
+- Hệ thống tự động phân tích các mũi đã tiêm và hiển thị các mũi còn thiếu kèm thời gian tiêm dự kiến.
 
----
+## ⚖️ Bản quyền
 
-## 🔐 Bảo mật & Quy tắc
-- Tuyệt đối không commit các file chứa API Key (`.env`, `local.properties`).
-- Backend sử dụng Middleware xác thực `X-API-KEY` cho mọi request.
-- Mọi dữ liệu nhạy cảm được xử lý qua HTTPS.
-
----
-
-## 📜 Bản quyền
 Copyright 2026 Nguyễn Duy Trường
 
 ---
-*Dự án được phát triển và tối ưu hóa bởi Antigravity Workflow Framework.*
+*Dự án được phát triển và tối ưu hóa bởi Antigravity AI Assistant.*

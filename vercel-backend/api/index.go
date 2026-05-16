@@ -100,8 +100,15 @@ func init() {
 	{
 		api.POST("/lookup", handleLookup)
 		api.POST("/analyze", handleAnalyze)
+		api.GET("/debug/portal", handleDebugPortal)
 	}
 }
+
+func handleDebugPortal(c *gin.Context) {
+	status := pc.CheckPortalConnectivity()
+	sendSuccess(c, status)
+}
+
 
 // Handler is the entry point for Vercel Go runtime
 func Handler(w http.ResponseWriter, r *http.Request) {

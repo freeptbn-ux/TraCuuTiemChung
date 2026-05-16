@@ -30,7 +30,7 @@ func AuthRequired(cfg *config.Config) gin.HandlerFunc {
 		}
 
 		if apiKey != cfg.X_API_KEY {
-			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"status":     "error",
 				"error_code": "UNAUTHORIZED",
 				"message":    "Invalid API Key",

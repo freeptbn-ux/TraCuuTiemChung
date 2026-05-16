@@ -1,46 +1,50 @@
 {
-  "updated_at": "2026-05-16T01:11:00Z",
+  "updated_at": "2026-05-16T16:00:00Z",
   "working_on": {
-    "feature": "Backend Vercel Stabilization",
-    "task": "Fix asset loading and session persistence",
+    "feature": "VNCDC Portal Search Fix",
+    "task": "Align Go backend with legacy Python search logic",
     "status": "completed",
     "files": [
-      "vercel-backend/api/index.go",
-      "vercel-backend/pkg/analyzer/engine.go",
-      "vercel-backend/assets/embed.go"
+      "vercel-backend/pkg/portal/client.go",
+      "vercel-backend/pkg/portal/cookie_jar.go"
     ],
-    "notes": "Backend hiện đã ổn định, Android App đã có thể tra cứu và nhận dự báo thành công."
+    "notes": "Đã sửa thành công lỗi trả về 0 kết quả trên Vercel bằng cách chuyển sang GET và sửa CookieJar. Kết quả thực tế đã tìm thấy 2 bệnh nhân, khớp hoàn toàn với bản legacy."
   },
   "pending_tasks": [
     {
-      "task": "Kiểm tra UI Android khi có nhiều bệnh nhân cùng số điện thoại (đảm bảo hiển thị đúng card)",
+      "task": "Kiểm tra UI Android khi có nhiều bệnh nhân cùng số điện thoại",
       "priority": "medium"
     },
     {
-      "task": "Tối ưu hóa caching Redis để giảm số lần Login vào Portal",
+      "task": "Cleanup các file test rác (test_legacy_fixed.py, test_go_lookup.go, debug_lookup.go)",
       "priority": "low"
     }
   ],
   "recent_changes": [
     {
       "type": "fix",
-      "description": "Sử dụng go:embed cho vaccine_rules.json trên Vercel.",
-      "files": ["vercel-backend/api/index.go", "pkg/analyzer/engine.go"]
+      "description": "Chuyển phương thức tra cứu sang GET và đồng bộ full headers/params với bản legacy.",
+      "files": ["vercel-backend/pkg/portal/client.go"]
     },
     {
-      "type": "feature",
-      "description": "Thêm gradlew.bat cho project gốc.",
-      "files": ["gradlew.bat"]
+      "type": "fix",
+      "description": "Cập nhật mã lỗi xác thực sai API Key thành 401 Unauthorized.",
+      "files": ["vercel-backend/pkg/middleware/auth.go"]
+    },
+    {
+      "type": "improvement",
+      "description": "Cải thiện RedisCookieJar để ép buộc Domain/Path cho cookie, giải quyết vấn đề mất session.",
+      "files": ["vercel-backend/pkg/portal/cookie_jar.go"]
     }
   ],
   "decisions_made": [
     {
-      "decision": "Nhúng file JSON trực tiếp vào binary Go.",
-      "reason": "Vercel không đảm bảo cấu hình đường dẫn file tĩnh cho Go runtime."
+      "decision": "Sử dụng GET cho endpoint /TimKiem.",
+      "reason": "Đồng bộ với bản legacy và thực tế Portal chấp nhận GET params."
     },
     {
-      "decision": "Buộc re-auth cho mỗi request phân tích.",
-      "reason": "Serverless stateless environment làm mất cookie session."
+      "decision": "Ép buộc Domain vncdc.gov.vn cho cookie trong Jar.",
+      "reason": "Tránh việc Go HTTP client bỏ qua cookie khi host không khớp tuyệt đối."
     }
   ]
 }
