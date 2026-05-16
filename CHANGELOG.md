@@ -1,29 +1,22 @@
 # Changelog
 
-Tất cả những thay đổi quan trọng của dự án sẽ được lưu vết tại đây.
+Tất cả các thay đổi quan trọng đối với dự án Tra Cứu Tiêm Chủng sẽ được ghi lại tại đây.
 
-## [2026-05-14] - Backend Go Migration & Cleanup
+## [2026-05-16] - Ổn định Backend & Tích hợp Android
 
 ### Added
-- **Backend Go**: Khởi tạo và hoàn thiện module backend bằng Go thay thế cho Python.
-- **API Handlers**: Triển khai `api/index.go` với các endpoint `/api/lookup` và `/api/analyze`.
-- **Analyzer Engine**: Porting thành công engine phân tích quy tắc tiêm chủng từ Python sang Go.
-- **Portal Client**: Triển khai client cào dữ liệu từ Cổng thông tin Tiêm chủng Quốc gia với hỗ trợ cookie và session.
-- **Unit Tests**: Hệ thống test toàn diện cho logic analyzer, portal client và cấu hình.
-- **Vercel Config**: Cấu hình `vercel.json` và `.vercelignore` tối ưu cho Go runtime.
-- **Documentation**: Tạo file `README.md` chi tiết bằng tiếng Việt.
+- Thêm file `gradlew.bat` ở gốc project để hỗ trợ build trên Windows.
+- Thêm cơ chế `go:embed` trong Go backend để đóng gói `vaccine_rules.json` vào file thực thi.
+- Tạo `README.md` (Tiếng Việt) hướng dẫn chi tiết về dự án.
+- Tạo `vercel-backend/assets/embed.go` để quản lý dữ liệu nhúng.
 
 ### Changed
-- Cấu trúc thư mục: Chuyển toàn bộ logic backend vào thư mục `vercel-backend/`.
-- Cải thiện logic phân tích nhóm vaccine Phế cầu (Pneumo) và Nhật Bản B (JE).
-- Tăng cường bảo mật API bằng middleware kiểm tra `X-API-KEY`.
+- Cập nhật `VercelPortalRepository.kt` để trỏ đúng vào Vercel production API.
+- Refactor `analyzer.Engine` hỗ trợ khởi tạo từ byte memory.
+- Cấu hình `X-API-KEY` trong `local.properties` cho Android.
+- Buộc Login portal VNCDC trước mỗi lần phân tích để đảm bảo session trong môi trường stateless.
 
 ### Fixed
-- Lỗi xung đột hàm helper trong các unit test của Go.
-- Lỗi phân tích phác đồ trộn (mixed series) trong engine.
-
-### Removed
-- **Legacy Python**: Di chuyển toàn bộ code Python cũ vào thư mục `python_backup/` để dọn dẹp không gian làm việc chính.
-
----
-*Cập nhật bởi Antigravity AI.*
+- Sửa lỗi `no such file or directory` khi nạp quy tắc tiêm chủng trên Vercel.
+- Sửa lỗi không tìm thấy dữ liệu tiêm chủng do mất session cookie giữa các lần gọi serverless function.
+- Sửa lỗi `path/filepath` unused trong backend.

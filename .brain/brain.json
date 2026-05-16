@@ -2,51 +2,54 @@
   "meta": {
     "schema_version": "1.1.0",
     "awf_version": "3.3.0",
-    "last_updated": "2026-05-14T20:07:00Z"
+    "last_updated": "2026-05-16T01:11:00Z"
   },
   "project": {
     "name": "Tra Cứu Tiêm Chủng",
-    "type": "Android App + Go Backend",
-    "status": "Production-Ready (Go Migration Complete)"
+    "type": "Android + Go Backend",
+    "status": "Production Ready (Vercel)"
   },
   "tech_stack": {
     "frontend": {
       "language": "Kotlin",
-      "framework": "Jetpack Compose",
-      "ui": "Material 3",
-      "features": ["Predictive Back Gesture", "DataStore Encryption"]
+      "ui": "Jetpack Compose",
+      "network": "Retrofit + OkHttp"
     },
     "backend": {
-      "language": "Go 1.25",
-      "framework": "Gin",
-      "hosting": "Vercel Serverless",
-      "libraries": ["goquery", "resty", "godotenv"]
+      "language": "Go",
+      "framework": "Gin Gonic",
+      "runtime": "Vercel Serverless"
     },
     "database": {
-      "type": "External (VNCDC Portal)",
-      "cache": "Upstash Redis"
+      "caching": "Redis (Upstash)"
     }
   },
   "api_endpoints": [
     {
-      "path": "/api/health",
-      "method": "GET",
-      "explained": "Kiểm tra trạng thái hệ thống"
-    },
-    {
       "path": "/api/lookup",
       "method": "POST",
-      "explained": "Tra cứu danh sách bệnh nhân theo số điện thoại"
+      "explained": "Tra cứu danh sách bệnh nhân theo số điện thoại."
     },
     {
       "path": "/api/analyze",
       "method": "POST",
-      "explained": "Phân tích lịch sử tiêm và đưa ra gợi ý"
+      "explained": "Phân tích lịch sử tiêm chủng và đưa ra khuyến nghị."
     }
   ],
-  "business_rules": {
-    "summary": "Phân tích quy tắc tiêm chủng dựa trên tuổi và khoảng cách giữa các mũi.",
-    "groups_handled": ["Rota", "JE", "MMR", "Flu", "Pneumo", "6-in-1"],
-    "logic": "Sử dụng engine phân tích đa luồng (multi-checker) để xử lý các phác đồ phức tạp."
+  "business_rules": [
+    {
+      "rule": "Stateless Auth",
+      "explained": "Mỗi request lên Vercel phải Login lại vào VNCDC Portal để lấy Cookie vì môi trường serverless không giữ session."
+    },
+    {
+      "rule": "Embedded Rules",
+      "explained": "File vaccine_rules.json được nhúng trực tiếp vào binary Go bằng go:embed để tránh lỗi đường dẫn trên Vercel."
+    }
+  ],
+  "knowledge_items": {
+    "gotchas": [
+      "Vercel Go runtime không tự động bundle file tĩnh ngoài thư mục api, cần dùng go:embed.",
+      "Cần X-API-KEY để xác thực giữa App và Backend."
+    ]
   }
 }

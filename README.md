@@ -1,149 +1,104 @@
-# 💉 Tra Cứu Tiêm Chủng
+# 💉 Tra Cứu Tiêm Chủng (Vaccination Lookup)
 
-Ứng dụng Android giúp tra cứu lịch sử tiêm chủng và nhận khuyến nghị vaccine cá nhân hóa, tích hợp với cổng thông tin VNCDC.
+Ứng dụng Android giúp tra cứu lịch sử tiêm chủng và nhận khuyến nghị vaccine cá nhân hóa bằng cách tích hợp trực tiếp với cổng thông tin VNCDC. Hệ thống sử dụng engine phân tích thông minh để đưa ra các đề xuất dựa trên độ tuổi, lịch sử tiêm và các quy tắc y tế phức tạp.
 
 ---
 
 ## 🏗️ Kiến trúc hệ thống
 
+```mermaid
+graph TD
+    A[Android App (Kotlin/Compose)] -- JSON (X-API-KEY) --> B[Vercel Backend (Go)]
+    B -- Scraping (Cookie Jar) --> C[Cổng VNCDC (vncdc.gov.vn)]
+    B -- Cache/Lock --> D[Upstash Redis]
+    B -- Engine --> E[Vaccine Rules JSON]
 ```
-┌─────────────────────┐        ┌──────────────────────┐        ┌─────────────────┐
-│   Android App       │ ──────▶│  Vercel Backend (Go) │ ──────▶│  Cổng VNCDC    │
-│   (Kotlin/Compose)  │ JSON   │  tracuutiemchung      │  HTTP  │  tiemchung.     │
-│                     │◀────── │  .vercel.app          │◀────── │  vncdc.gov.vn   │
-└─────────────────────┘        └──────────────────────┘        └─────────────────┘
-```
-
-### Thành phần chính
-
-| Thư mục | Mô tả |
-|---|---|
-| `app/` | Ứng dụng Android (Kotlin + Jetpack Compose) |
-| `vercel-backend/` | Backend Go chạy trên Vercel Serverless |
-| `engine/` | Engine phân tích lịch tiêm chủng (Go) |
 
 ---
 
-## 📱 Ứng dụng Android
+## 🚀 Tính năng chính
 
-### Tính năng
-- Tra cứu bệnh nhân theo số điện thoại
-- Hiển thị lịch sử các mũi tiêm đã thực hiện
-- Phân tích và đề xuất các vaccine còn thiếu
-- Cảnh báo tương tác giữa các loại vaccine
+### 📱 Ứng dụng Android
+- **Tra cứu nhanh**: Tìm kiếm hồ sơ bệnh nhân qua số điện thoại.
+- **Lịch sử chi tiết**: Hiển thị danh sách các mũi tiêm đã thực hiện từ cổng VNCDC.
+- **Phân tích thông minh**: Đề xuất các mũi tiêm còn thiếu hoặc đến lịch.
+- **Cảnh báo an toàn**: Phát hiện tương tác giữa các loại vaccine (VD: khoảng cách giữa các vaccine sống).
+- **Giao diện hiện đại**: Sử dụng Jetpack Compose với Material Design 3.
 
-### Yêu cầu
-- Android 8.0 (API 26) trở lên
-- Kết nối Internet
+### ⚙️ Backend (Vercel Go)
+- **Scraping Engine**: Tự động đăng nhập và trích xuất dữ liệu từ cổng VNCDC.
+- **High Performance**: Viết bằng Go, tối ưu hóa tốc độ xử lý và bộ nhớ.
+- **Distributed Locking**: Sử dụng Redis để quản lý session và tránh xung đột khi đăng nhập đồng thời.
+- **Stateless Architecture**: Chạy hoàn hảo trên môi trường Serverless của Vercel.
 
-### Cấu hình (`local.properties`)
+---
 
+## 🛠️ Công nghệ sử dụng
+
+| Thành phần | Công nghệ |
+|---|---|
+| **Mobile** | Kotlin, Jetpack Compose, Retrofit, OkHttp, Coroutines, Kotlinx Serialization |
+| **Backend** | Go (Golang), Gin Gonic, Resty, GoQuery, slog |
+| **Dữ liệu** | Upstash Redis (Session & Rate Limiting) |
+| **Infrastructure** | Vercel (Serverless Functions) |
+
+---
+
+## 📁 Cấu trúc thư mục
+
+```
+.
+├── app/                # Mã nguồn ứng dụng Android (Kotlin)
+├── vercel-backend/      # Backend Go chạy trên Vercel
+│   ├── api/            # Các endpoint API (lookup, analyze)
+│   ├── pkg/            # Thư viện logic (portal, analyzer, middleware)
+│   └── assets/         # Quy tắc tiêm chủng (vaccine_rules.json)
+├── engine/             # Engine phân tích dùng chung (Go)
+├── models/             # Định nghĩa cấu trúc dữ liệu (Go)
+└── .brain/             # Dữ liệu tri thức dự án (AI Context)
+```
+
+---
+
+## 🔧 Hướng dẫn cài đặt
+
+### 1. Cấu hình Backend (Vercel)
+Tạo dự án trên Vercel và thiết lập các biến môi trường sau:
+- `X_API_KEY`: Khóa bí mật dùng để xác thực giữa App và Backend.
+- `PORTAL_USERNAME`: Tài khoản cổng VNCDC.
+- `PORTAL_PASSWORD`: Mật khẩu cổng VNCDC.
+- `UPSTASH_REDIS_REST_URL`: URL Redis từ Upstash.
+- `UPSTASH_REDIS_REST_TOKEN`: Token Redis từ Upstash.
+
+### 2. Cấu hình Android App
+Tạo file `local.properties` trong thư mục gốc:
 ```properties
-sdk.dir=C:\Users\...\AppData\Local\Android\Sdk
 X_API_KEY=your_api_key_here
+BASE_URL=https://your-project.vercel.app/
 ```
 
-### Build & Chạy
-
-```bash
-# Build debug APK
-./gradlew assembleDebug
-
-# Cài lên thiết bị
-adb install app/build/outputs/apk/debug/app-debug.apk
-```
+### 3. Build & Chạy
+- **Android**: Mở bằng Android Studio và nhấn Run, hoặc dùng lệnh:
+  ```bash
+  ./gradlew assembleDebug
+  ```
+- **Backend (Local)**:
+  ```bash
+  cd vercel-backend
+  go run cmd/server/main.go
+  ```
 
 ---
 
-## ⚙️ Backend Vercel
-
-Backend viết bằng Go, chạy dưới dạng Serverless Function trên Vercel. Mỗi request tự đăng nhập vào cổng VNCDC, scrape dữ liệu và phân tích.
-
-### API Endpoints
-
-| Method | Endpoint | Mô tả |
-|---|---|---|
-| `GET` | `/api/health` | Kiểm tra trạng thái |
-| `POST` | `/api/lookup` | Tìm bệnh nhân theo SĐT |
-| `POST` | `/api/analyze` | Phân tích lịch tiêm của bệnh nhân |
-
-### Xác thực
-
-Tất cả request tới `/api/lookup` và `/api/analyze` phải có header:
-
-```
-X-API-KEY: <your_key>
-```
-
-### Biến môi trường (Vercel)
-
-| Tên | Mô tả |
-|---|---|
-| `X_API_KEY` | Khóa bảo mật cho mobile app |
-| `PORTAL_USERNAME` | Tên đăng nhập cổng VNCDC |
-| `PORTAL_PASSWORD` | Mật khẩu cổng VNCDC |
-| `UPSTASH_REDIS_REST_URL` | URL Redis (Upstash) để cache session |
-| `UPSTASH_REDIS_REST_TOKEN` | Token Redis (Upstash) |
-
-### Chạy local
-
-```bash
-cd vercel-backend
-cp .env.example .env
-# Điền thông tin vào .env
-
-go run cmd/server/main.go
-```
-
-### Chạy test
-
-```bash
-cd vercel-backend
-
-# Unit tests
-go test ./...
-
-# Integration test với dữ liệu thật (cần .env)
-go test ./api/ -run TestLiveVNVC -v -timeout 120s
-```
-
-### Deploy
-
-Push code lên nhánh `main` → Vercel tự động deploy.
-
-```bash
-git push origin main
-```
+## 🔐 Bảo mật & Quy tắc
+- Tuyệt đối không commit các file chứa API Key (`.env`, `local.properties`).
+- Backend sử dụng Middleware xác thực `X-API-KEY` cho mọi request.
+- Mọi dữ liệu nhạy cảm được xử lý qua HTTPS.
 
 ---
 
-## 🔬 Engine Phân Tích
-
-Engine phân tích vaccine nằm tại `vercel-backend/pkg/analyzer/`, được thiết kế để:
-
-- Áp dụng các quy tắc tiêm chủng từ file `assets/vaccine_rules.json`
-- Tính toán khoảng cách tối thiểu giữa các mũi tiêm
-- Phát hiện tương tác giữa các loại vaccine (VD: MMR và vaccine sống)
-- Hỗ trợ nhiều loại quy tắc: chuỗi liều, phụ thuộc tuổi, nhóm đặc biệt
+## 📜 Bản quyền
+Copyright 2026 Nguyễn Duy Trường
 
 ---
-
-## 🔐 Bảo mật
-
-- `local.properties` và `.env` **không được commit** lên Git
-- API key được mã hóa trong `BuildConfig` (không hard-code trong source)
-- Backend sử dụng Redis lock để tránh race condition khi nhiều request đăng nhập đồng thời
-
----
-
-## 📝 Ghi chú phát triển
-
-- Backend là **stateless serverless** — mỗi invocation phải tự đăng nhập lại
-- Redis (Upstash) được dùng để cache cookie session và distributed lock
-- Engine phân tích đã được kiểm tra parity với implementation Python legacy
-
----
-
-## 📄 License
-
-Dự án nội bộ. Không dùng cho mục đích thương mại.
+*Dự án được phát triển và tối ưu hóa bởi Antigravity Workflow Framework.*

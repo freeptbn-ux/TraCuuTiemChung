@@ -1,0 +1,68 @@
+{
+  "dob": "27/07/2020",
+  "missing_vaccines": [
+    {
+      "vaccine_name": "Morcvax (Tả)",
+      "rule_type": "standard",
+      "status": "DUE_NOW",
+      "next_dose": "16/05/2026",
+      "message": "Morcvax (Tả) (Chưa tiêm - cần 2 liều). đủ điều kiện tuổi",
+      "status_tags": [
+        "eligible"
+      ]
+    },
+    {
+      "vaccine_name": "Pneumovax 23 / PNEUMO 23 (Phế cầu)",
+      "rule_type": "standard",
+      "status": "DUE_NOW",
+      "next_dose": "16/05/2026",
+      "message": "Pneumovax 23 / PNEUMO 23 (Phế cầu) (Chưa tiêm - cần 1 liều). đủ điều kiện tuổi",
+      "status_tags": [
+        "eligible"
+      ]
+    },
+    {
+      "vaccine_name": "Typhim Vi (Thương hàn)",
+      "rule_type": "standard",
+      "status": "DUE_NOW",
+      "next_dose": "16/05/2026",
+      "message": "Typhim Vi (Thương hàn) (Chưa tiêm - cần 1 liều). đủ điều kiện tuổi",
+      "status_tags": [
+        "eligible"
+      ]
+    },
+    {
+      "vaccine_name": "Viêm Gan A",
+      "rule_type": "standard",
+      "status": "DUE_NOW",
+      "next_dose": "16/05/2026",
+      "message": "Viêm Gan A (Lựa chọn: Avaxim 80U (Pháp) / Twinrix Hoặc HAVAX (Việt Nam)). đủ điều kiện tuổi",
+      "status_tags": [
+        "due"
+      ]
+    },
+    {
+      "vaccine_name": "Vắc xin Cúm",
+      "rule_type": "standard",
+      "status": "DUE_LATER",
+      "next_dose": "16/11/2026",
+      "message": "Vắc xin Cúm (Đã tiêm. Mũi nhắc tiếp theo vào tháng 11/2026).",
+      "status_tags": [
+        "info",
+        "booster_upcoming"
+      ]
+    },
+    {
+      "vaccine_name": "VA - MENGOC - BC (Não mô cầu BC)",
+      "rule_type": "standard",
+      "status": "NEEDS_REVIEW",
+      "next_dose": "",
+      "message": "Lưu ý: Trẻ từ 2 tuổi trở lên nên tiêm VA-Mengoc BC SAU khi đã tiêm MenQuadfi/Menactra để đạt hiệu quả bảo vệ tốt nhất.",
+      "status_tags": [
+        "warning",
+        "interaction_reverse_mengoc"
+      ]
+    }
+  ],
+  "patient_name": "Nguyễn Duy Minh Khôi"
+}

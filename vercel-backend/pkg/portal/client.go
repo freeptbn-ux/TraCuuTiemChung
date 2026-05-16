@@ -256,7 +256,15 @@ func (pc *PortalClient) LookupPatients(phone string) ([]models.Patient, error) {
 		htmlContent = resp.String()
 	}
 
-	return pc.ParseSearchResults(htmlContent)
+	results, err := pc.ParseSearchResults(htmlContent)
+	if err == nil && len(results) == 0 {
+		snippet := htmlContent
+		if len(snippet) > 500 {
+			snippet = snippet[:500]
+		}
+		slog.Warn("LookupPatients: empty results", "phone", phone, "html_snippet", snippet)
+	}
+	return results, err
 }
 
 // ParseSearchResults parses the HTML content of search results

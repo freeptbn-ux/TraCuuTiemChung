@@ -52,27 +52,31 @@ class VercelPortalRepository(
                 val body = response.body()
                 if (body?.status == "success") {
                     val data = body.data
-                    val patientInfo = PatientInfo(
-                        fullName = data.patientName,
-                        phoneNumber = phone,
-                        dateOfBirth = data.dob
-                    )
-                    val recommendations = data.missingVaccines.map { it.toDomain() }
-                    val records = data.administeredVaccines.map {
-                        VaccinationRecord(
-                            vaccineName = it.vaccineName,
-                            vaccinationDate = it.date,
-                            doseNumber = it.dose?.toIntOrNull(),
-                            provider = it.provider ?: "VNCDC"
+                    if (data != null) {
+                        val patientInfo = PatientInfo(
+                            fullName = data.patientName,
+                            phoneNumber = phone,
+                            dateOfBirth = data.dob
                         )
+                        val recommendations = data.missingVaccines.map { it.toDomain() }
+                        val records = data.administeredVaccines.map {
+                            VaccinationRecord(
+                                vaccineName = it.vaccineName,
+                                vaccinationDate = it.date,
+                                doseNumber = it.dose?.toIntOrNull(),
+                                provider = it.provider ?: "VNCDC"
+                            )
+                        }
+                        
+                        Result.success(AnalysisResult(
+                            patientInfo = patientInfo,
+                            records = records,
+                            recommendations = recommendations,
+                            warnings = emptyList()
+                        ))
+                    } else {
+                        Result.failure(PortalLookupException.NetworkFailed("Dữ liệu rỗng"))
                     }
-                    
-                    Result.success(AnalysisResult(
-                        patientInfo = patientInfo,
-                        records = records,
-                        recommendations = recommendations,
-                        warnings = emptyList()
-                    ))
                 } else {
                     Result.failure(PortalLookupException.NetworkFailed(body?.detail ?: "Không thể phân tích dữ liệu"))
                 }

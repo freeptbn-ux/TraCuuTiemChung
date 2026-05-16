@@ -1,49 +1,46 @@
 {
-  "updated_at": "2026-05-14T20:07:30Z",
+  "updated_at": "2026-05-16T01:11:00Z",
   "working_on": {
-    "feature": "Vercel Backend (Go)",
-    "task": "Cleanup and GitHub Sync",
+    "feature": "Backend Vercel Stabilization",
+    "task": "Fix asset loading and session persistence",
     "status": "completed",
     "files": [
-      "api/index.go",
-      "README.md",
-      "vercel.json",
-      ".gitignore"
+      "vercel-backend/api/index.go",
+      "vercel-backend/pkg/analyzer/engine.go",
+      "vercel-backend/assets/embed.go"
     ],
-    "notes": "Backend đã chạy tốt local, đã push lên GitHub origin/main."
+    "notes": "Backend hiện đã ổn định, Android App đã có thể tra cứu và nhận dự báo thành công."
   },
   "pending_tasks": [
     {
-      "task": "Kiểm tra log trên Vercel sau khi push",
-      "priority": "high"
+      "task": "Kiểm tra UI Android khi có nhiều bệnh nhân cùng số điện thoại (đảm bảo hiển thị đúng card)",
+      "priority": "medium"
     },
     {
-      "task": "Tích hợp nốt các tính năng nâng cao vào Android app (nếu có)",
-      "priority": "medium"
+      "task": "Tối ưu hóa caching Redis để giảm số lần Login vào Portal",
+      "priority": "low"
     }
   ],
   "recent_changes": [
     {
-      "timestamp": "2026-05-14T20:05:00Z",
-      "type": "migration",
-      "description": "Hoàn tất chuyển đổi Python sang Go",
-      "files": ["vercel-backend/**"]
+      "type": "fix",
+      "description": "Sử dụng go:embed cho vaccine_rules.json trên Vercel.",
+      "files": ["vercel-backend/api/index.go", "pkg/analyzer/engine.go"]
     },
     {
-      "timestamp": "2026-05-14T20:06:00Z",
-      "type": "git",
-      "description": "Push mã nguồn lên GitHub",
-      "files": ["*"]
+      "type": "feature",
+      "description": "Thêm gradlew.bat cho project gốc.",
+      "files": ["gradlew.bat"]
     }
   ],
   "decisions_made": [
     {
-      "decision": "Dùng Go Gin thay cho Python FastAPI",
-      "reason": "Hiệu năng cao hơn trên Vercel Go runtime."
+      "decision": "Nhúng file JSON trực tiếp vào binary Go.",
+      "reason": "Vercel không đảm bảo cấu hình đường dẫn file tĩnh cho Go runtime."
     },
     {
-      "decision": "Lưu code Python cũ vào python_backup/",
-      "reason": "Để dọn dẹp repo nhưng vẫn giữ lại để tham chiếu nếu cần."
+      "decision": "Buộc re-auth cho mỗi request phân tích.",
+      "reason": "Serverless stateless environment làm mất cookie session."
     }
   ]
 }

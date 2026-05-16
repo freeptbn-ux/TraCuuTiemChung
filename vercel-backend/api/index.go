@@ -51,6 +51,7 @@ type StandardResponse struct {
 	Status    string      `json:"status"`
 	Data      interface{} `json:"data,omitempty"`
 	Message   string      `json:"message,omitempty"`
+	Detail    string      `json:"detail,omitempty"` // For compatibility with Android app
 	RequestID string      `json:"request_id"`
 }
 
@@ -66,6 +67,7 @@ func sendError(c *gin.Context, code int, message string) {
 	c.AbortWithStatusJSON(code, StandardResponse{
 		Status:    "error",
 		Message:   message,
+		Detail:    message,
 		RequestID: c.GetString("request_id"),
 	})
 }
@@ -111,7 +113,8 @@ type LookupRequest struct {
 func handleLookup(c *gin.Context) {
 	var req LookupRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		sendError(c, http.StatusBadRequest, "Phone number is required")
+		slog.Error("lookup binding failed", "error", err)
+		sendError(c, http.StatusBadRequest, "Phone number is required: "+err.Error())
 		return
 	}
 
@@ -120,6 +123,12 @@ func handleLookup(c *gin.Context) {
 		slog.Error("lookup failed", "phone", req.Phone, "error", err)
 		c.Error(err) // Centralized error handling
 		return
+	}
+
+	if len(results) == 0 {
+		slog.Warn("no patients found for phone", "phone", req.Phone)
+	} else {
+		slog.Info("found patients", "phone", req.Phone, "count", len(results))
 	}
 
 	sendSuccess(c, results)
