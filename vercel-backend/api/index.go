@@ -20,11 +20,13 @@ import (
 )
 
 var (
-	cfg *config.Config
-	pc  *portal.PortalClient
+	cfg    *config.Config
+	pc     *portal.PortalClient
+	router *gin.Engine
 )
 
 func init() {
+	// 1. Core Services
 	logger.InitLogger()
 	cfg = config.LoadConfig()
 
@@ -40,10 +42,70 @@ func init() {
 	}
 
 	pc = portal.NewPortalClient(cfg.PORTAL_USERNAME, cfg.PORTAL_PASSWORD, redisClient)
-	// Vercel environment usually doesn't need to set Gin mode, but it's good practice
+
+	// 2. Gin Engine Setup
 	if os.Getenv("VERCEL") == "1" {
 		gin.SetMode(gin.ReleaseMode)
 	}
+
+	router = gin.New()
+
+	// 3. Global Middleware
+	router.Use(
+		middleware.RequestID(),
+		middleware.LoggerMiddleware(),
+		middleware.ErrorHandler(),
+		gin.Recovery(),
+	)
+
+	// 4. Routes Definition
+	// Root & Favicon to avoid 404 logs
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  "online",
+			"service": "Tra Cuu Tiem Chung API",
+			"message": "Welcome! The API is running correctly.",
+			"docs":    "/api/health",
+		})
+	})
+
+	router.GET("/favicon.ico", func(c *gin.Context) {
+		c.Status(http.StatusNoContent)
+	})
+
+	router.GET("/favicon.png", func(c *gin.Context) {
+		c.Status(http.StatusNoContent)
+	})
+
+	// Health check
+	router.GET("/api/health", func(c *gin.Context) {
+		sendSuccess(c, gin.H{
+			"environment": os.Getenv("VERCEL_ENV"),
+			"message":     "Backend is running",
+		})
+	})
+
+	// 404 Handler
+	router.NoRoute(func(c *gin.Context) {
+		slog.Warn("route not found", "path", c.Request.URL.Path)
+		sendError(c, http.StatusNotFound, "Endpoint not found: "+c.Request.URL.Path)
+	})
+
+	// API Group with Auth & Rate Limit
+	api := router.Group("/api")
+	api.Use(
+		middleware.AuthRequired(cfg),
+		middleware.RateLimit(pc.RedisClient(), 50, time.Minute),
+	)
+	{
+		api.POST("/lookup", handleLookup)
+		api.POST("/analyze", handleAnalyze)
+	}
+}
+
+// Handler is the entry point for Vercel Go runtime
+func Handler(w http.ResponseWriter, r *http.Request) {
+	router.ServeHTTP(w, r)
 }
 
 // StandardResponse is the base for all API responses
@@ -70,40 +132,6 @@ func sendError(c *gin.Context, code int, message string) {
 		Detail:    message,
 		RequestID: c.GetString("request_id"),
 	})
-}
-
-// Handler is the entry point for Vercel Go runtime
-func Handler(w http.ResponseWriter, r *http.Request) {
-	router := gin.New()
-	
-	// Global Middleware
-	router.Use(
-		middleware.RequestID(),
-		middleware.LoggerMiddleware(),
-		middleware.ErrorHandler(),
-		gin.Recovery(),
-	)
-
-	// Health check
-	router.GET("/api/health", func(c *gin.Context) {
-		sendSuccess(c, gin.H{
-			"environment": os.Getenv("VERCEL_ENV"),
-			"message":     "Backend is running",
-		})
-	})
-
-	// API Group with Auth & Rate Limit
-	api := router.Group("/api")
-	api.Use(
-		middleware.AuthRequired(cfg),
-		middleware.RateLimit(pc.RedisClient(), 50, time.Minute),
-	)
-	{
-		api.POST("/lookup", handleLookup)
-		api.POST("/analyze", handleAnalyze)
-	}
-
-	router.ServeHTTP(w, r)
 }
 
 type LookupRequest struct {

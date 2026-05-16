@@ -28,8 +28,9 @@ graph TD
 ### ⚙️ Backend (Vercel Go)
 - **Scraping Engine**: Tự động đăng nhập và trích xuất dữ liệu từ cổng VNCDC.
 - **High Performance**: Viết bằng Go, tối ưu hóa tốc độ xử lý và bộ nhớ.
+- **Warm Start Optimization**: Sử dụng Router toàn cục và khởi tạo một lần (Singleton Pattern) giúp phản hồi cực nhanh trên Vercel.
 - **Distributed Locking**: Sử dụng Redis để quản lý session và tránh xung đột khi đăng nhập đồng thời.
-- **Stateless Architecture**: Chạy hoàn hảo trên môi trường Serverless của Vercel.
+- **Stateless Architecture**: Chạy hoàn hảo trên môi trường Serverless của Vercel với cấu trúc Monolithic API.
 
 ---
 
